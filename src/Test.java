@@ -19,7 +19,6 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.internal.wc.DefaultSVNOptions;
 import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.ISVNOptions;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
 import org.tmatesoft.svn.core.wc.SVNDiffClient;
@@ -34,7 +33,7 @@ public class Test {
 	
 	public static void main(String[] args) throws SVNException {
 		
-		DAVRepositoryFactory.setup();
+		DAVRepositoryFactory.setup(); 
 	    SVNRepositoryFactoryImpl.setup();
 		File impDir = new File("D:\\新建文件夹\\新建文件夹 (2)");
 		SVNClientManager ourClientManager = null;

@@ -1475,7 +1475,7 @@ public class PackWarServlet extends BaseServlet {
 					e.printStackTrace();
 					System.out.println("==errorin PackWarServlet.getDiff()  svnDiffClient.doDiff()");
 				}
-				diffMap.put(entry.getKey(), baos.toString());
+				diffMap.put(entry.getKey(), baos.toString("UTF-8"));
 				baos.close();
 //				System.out.println("==baos.tostring() + "+baos.toString());
 			} else {

@@ -123,7 +123,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    word-wrap : break-word ;
 		    overflow: hidden ;
 		    text-align: left;
-		    padding-left: 296px;
+		    padding-left: 145px;
+		    padding-top: 20px;
+		    font-weight: bold;
 		}
   	</style>
   </head>
@@ -643,9 +645,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    						"</td>" +
 			    					"</tr>" +
     								"<tr class='diff_html' id='html_tr_"+ count +"' flag='0'>" +
-	    								"<td class='diff_td' colspan='4'><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")' style='float:right;margin-right: 170px;'>[x]</a></b>" +
+	    								"<td class='diff_td' colspan='4'><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")' style='float:right;margin-right: 60px;'>[x]</a></b>" +
 	    								"<input type='hidden' id='html_input_"+ count +"' value='"+ info +"'>" +
-	    								"<span id='html_span_"+ count +"' class='diff_span' ></span></td>" +
+	    								"<span id='html_span_"+ count +"' class='diff_span' ></span><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")' style='float:right;margin-right: 60px;'>[x]</a></b></td>" +
 	    							"</tr>" ;
    							} else {
    								html += 
