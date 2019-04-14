@@ -2,6 +2,7 @@ package servlet;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -19,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -26,10 +29,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
+import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNDiffClient;
+import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNStatus;
 import org.tmatesoft.svn.core.wc.SVNStatusClient;
 import org.tmatesoft.svn.core.wc.SVNStatusType;
+import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 import service.ApplyService;
 import service.ApplyServiceImpl;
@@ -46,6 +54,7 @@ import bean.SvnLoginBean;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class PackWarServlet extends BaseServlet {
 
@@ -218,10 +227,31 @@ public class PackWarServlet extends BaseServlet {
 		
 		//校验本地SVN
 		List<String> changedList = new ArrayList<>();
+		Map<String, String> doDiffMap = new HashMap<>();
 		if ("true".equals(isCheckSvn)) {
-			changedList = checkSvn(changedList, projectUrl);
+			
+			checkSvn(changedList, projectUrl);
+			for (String path : changedList) {
+				doDiffMap.put(path, "");
+			}
+			
+			//存储项目目录下所有变化文件的上级目录
+			List<String> tempList = new ArrayList<String>();
+			for (String path : changedList) {
+				int length = path.split("/").length;
+				String[] tmpStrs = path.split("/");
+				for (int i = tmpStrs.length-1; i>length; i--) {
+					String temp = path.split("/")[path.split("/").length-1];
+					path = path.replaceAll("/"+temp, "");
+					if (!tempList.contains(path)) {
+						tempList.add(path);
+					}
+				}
+			}
+			changedList.addAll(tempList);
 		}
 		String jsonData = getJSONString(projectUrl, changedList, version);
+		Map<String, String> diffMap = getDiff(getVsionFiles(doDiffMap));
 		
 		//计算运行用时
 		double endTime = System.currentTimeMillis();
@@ -233,8 +263,10 @@ public class PackWarServlet extends BaseServlet {
 	    json.put("jsonData", jsonData);
 	    json.put("version", version);
 	    json.put("webRootName", webRootName);
+	    json.put("diffMap", diffMap);
 	    response.setContentType("text/html;charset=UTF-8");
 	    response.getWriter().write(json.toString());
+	    
 	}
 	
 	/**
@@ -271,20 +303,6 @@ public class PackWarServlet extends BaseServlet {
 				break ;
 			}
 		}
-		//存储项目目录下所有变化文件的上级目录
-		List<String> tempList = new ArrayList<String>();
-		for (String path : changedList) {
-			int length = path.split("/").length;
-			String[] tmpStrs = path.split("/");
-			for (int i = tmpStrs.length-1; i>length; i--) {
-				String temp = path.split("/")[path.split("/").length-1];
-				path = path.replaceAll("/"+temp, "");
-				if (!tempList.contains(path)) {
-					tempList.add(path);
-				}
-			}
-		}
-		changedList.addAll(tempList);
 		return changedList;
 	}
 	
@@ -1438,6 +1456,58 @@ public class PackWarServlet extends BaseServlet {
 		response.setCharacterEncoding("UTF-8");
 	    response.setContentType("application/json");
 		response.getWriter().write(json.toString());
+	}
+	
+	@SuppressWarnings("deprecation")
+	public static Map<String, String> getDiff(Map<String, String> map) throws IOException {
+		FSRepositoryFactory.setup();
+		ISVNAuthenticationManager authManager =  null;
+		SVNDiffClient svnDiffClient = new SVNDiffClient(authManager, null);
+		ByteArrayOutputStream baos = null;
+		Map<String, String> diffMap = new HashMap<>();
+		for (Entry<String, String> entry : map.entrySet()) {
+			if ("modified".equals(entry.getValue())) {
+				File file = new File(entry.getKey());
+				baos = new ByteArrayOutputStream();
+				try {
+					svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.COMMITTED, SVNRevision.WORKING, true, true, baos);
+				} catch (SVNException e) {
+					e.printStackTrace();
+					System.out.println("==errorin PackWarServlet.getDiff()  svnDiffClient.doDiff()");
+				}
+				diffMap.put(entry.getKey(), baos.toString());
+				baos.close();
+//				System.out.println("==baos.tostring() + "+baos.toString());
+			} else {
+				diffMap.put(entry.getKey(), "none");
+			}
+		}
+		
+		return diffMap;
+	}
+	
+	public static Map<String, String> getVsionFiles(Map<String, String> doDiffMap) {
+		Map<String, String> vMap = new HashMap<>();
+		for (Entry<String, String> entry : doDiffMap.entrySet()) {
+			SVNClientManager ourClientManager = SVNClientManager.newInstance(null, null, null); 
+			File compFile = new File(entry.getKey());
+			SVNStatusClient statusClient = ourClientManager.getStatusClient();
+			SVNStatus doStatus = null;
+			try {
+				doStatus = statusClient.doStatus(compFile, false);
+				SVNStatusType nodeStatus = doStatus.getContentsStatus();
+				if (SVNStatusType.STATUS_MODIFIED.equals(nodeStatus)) {
+					vMap.put(entry.getKey(), "modified");
+//					System.out.println("---"+ nodeStatus +"---："+entry.getKey());
+				} else {
+					vMap.put(entry.getKey(), "none");
+				}
+			} catch (SVNException e) {
+				e.printStackTrace();
+				System.out.println("==errorin PackWarServlet.getVsionFiles() 无法判断是否版本文件："+entry.getKey());
+			}
+		}
+		return vMap;
 	}
 	
 }

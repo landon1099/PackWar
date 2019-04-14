@@ -47,7 +47,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		table {
 		   font-size:15px;
 		}
-		.all{
+		.all {
 			margin-top: 50px;
 			margin-left: 20px;
 			margin-right: 20px;
@@ -62,7 +62,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			border: none; 
 			cursor: pointer; 
 		}
-		.mbtn{
+		.mbtn {
 			padding-left: 10px;
 		}
 		.table-hover>tbody>tr:hover {
@@ -93,8 +93,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			margin-bottom:0;
 			text-align:left;
 		}
-		.svnDirs{
+		.svnDirs {
 			display:none;
+		}
+		.diff_a {
+			cursor:pointer;
+			color:#052cec;
+		}
+		.diff_tr {
+			font-weight: bold;
+			font-size: 8px;
+		}
+		.diff_tr_odd {
+			font-weight: bold;
+			font-size: 8px;
+			background-color: #226cf112;
+		}
+		.diff_td {
+		}
+		.diff_html {
+			display: none;
+			background-color: #8fbc8f17;
+		}
+		.diff_span {
+			word-break:normal; 
+		    width:auto; 
+		    display:block; 
+		    white-space:pre-wrap;
+		    word-wrap : break-word ;
+		    overflow: hidden ;
+		    text-align: left;
+		    padding-left: 296px;
 		}
   	</style>
   </head>
@@ -393,6 +422,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 					</th>
 				</tr>
+				<tr id="diff_point"></tr>
 			</tbody>
 		</table>
 		
@@ -565,31 +595,76 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 url: "<%=path%>/pack?method=getProFiles",
                 data: {"proUrl":projectUrl, "isCheckSvn":isCheckSvn},
                 success: function(data) {
-                	$("#webRootName").val(data.webRootName+"");
-                	var json = eval("("+data.jsonData+")");
-                	$("#EuiTree").tree({
-						data:json,
-						onlyLeafCheck:false,
-						onSelect:function(node){
-　　							$(this).tree(node.state === 'closed' ? 'expand' : 'collapse', node.target); 
-						},
-						onLoadSuccess:function(){
-							var nodes = $("#EuiTree").tree('getChecked');
-							if(nodes != null && nodes.length > 0){
-								for(var i=0; i<nodes.length; i++){
-									expandParent(nodes[i]);
-								}
-							}
-						}
-					});
-					if(data.version != 0){
-              			toastr.info("<b>JDK版本："+data.version+"</b>");
-					}else{
-						toastr.warning("<b>无法识别JDK版本！</b>");
-					}
-					$("#div-a").css("display", "block");
-					$("#EuiTree").css("display", "block");
-             		$.unblockUI();
+               		$("#webRootName").val(data.webRootName+"");
+                   	var json = eval("("+data.jsonData+")");
+                   	$("#EuiTree").tree({
+   						data:json,
+   						onlyLeafCheck:false,
+   						onSelect:function(node){
+   　　							$(this).tree(node.state === 'closed' ? 'expand' : 'collapse', node.target); 
+   						},
+   						onLoadSuccess:function(){
+   							var nodes = $("#EuiTree").tree('getChecked');
+   							if(nodes != null && nodes.length > 0){
+   								for(var i=0; i<nodes.length; i++){
+   									expandParent(nodes[i]);
+   								}
+   							}
+   						}
+   					});
+   					if(data.version != 0){
+                 			toastr.info("<b>JDK版本："+data.version+"</b>");
+   					}else{
+   						toastr.warning("<b>无法识别JDK版本！</b>");
+   					}
+   					
+   					if (JSON.stringify(data.diffMap) != JSON.stringify({})) {
+   						var html = 
+    						"<tr style='background-color:#c4c5c763;font-weight:bold;'>" +
+	    						"<td>序号</td>" +
+	    						"<td colspan='2'>文件列表</td>" +
+	    						"<td><a href='javascript:void(0)' onclick='tDiffList()' style='color:#ec5a05'>Toggle</a></td>" +
+	    					"</tr>" ;
+	    				var count = 1;
+   						for (var key in data.diffMap) {
+   							var fileNm = key.split("/")[key.split("/").length - 1];
+   							var clas = "diff_tr";
+   							if (count%2 == 0) {
+   								clas = "diff_tr_odd";
+   							}
+   							if (data.diffMap[key] != "none") {
+	   							var info = data.diffMap[key];
+    							html +=
+	    							"<tr class='"+ clas +"'>" +
+			    						"<td>"+ count +"</td>" +
+			    						"<td colspan='2'>"+ key +"</td>" +
+			    						"<td>" +
+			    							"<a class='diff_a' href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")'>"+ fileNm +"</a>" +
+			    						"</td>" +
+			    					"</tr>" +
+    								"<tr class='diff_html' id='html_tr_"+ count +"' flag='0'>" +
+	    								"<td class='diff_td' colspan='4'><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")' style='float:right;margin-right: 170px;'>[x]</a></b>" +
+	    								"<input type='hidden' id='html_input_"+ count +"' value='"+ info +"'>" +
+	    								"<span id='html_span_"+ count +"' class='diff_span' ></span></td>" +
+	    							"</tr>" ;
+   							} else {
+   								html += 
+	    							"<tr class='"+ clas +"'>" +
+			    						"<td>"+ count +"</td>" +
+			    						"<td colspan='2'>"+ key +"</td>" +
+			    						"<td id='td_"+ key +"'>" +
+			    							"<b>"+ fileNm +"</b>" +
+			    						"</td>" +
+			    					"</tr>" ;
+   							}
+   							count++;
+   						}
+	    				$("#diff_point").before(html);
+   					}
+   					
+   					$("#div-a").css("display", "block");
+   					$("#EuiTree").css("display", "block");
+                		$.unblockUI();
 				}
 			});
 		}
@@ -1761,6 +1836,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     }
                	}
             ); 
+		}
+		
+		function tDiffHtml(id) {
+			var no = id.replace("html_tr_", "");
+			var flag = $("#" + id).attr('flag');
+			if (flag == 0) {
+				var info = $("#html_input_" + no).val();
+				$("#html_span_" + no).text(info);
+				$("#" + id).show();
+				$("#" + id).attr('flag', 1);
+			} else {
+				$("#" + id).hide();
+				$("#" + id).attr('flag', 0);
+			}
+		}
+		
+		function tDiffList() {
+			$(".diff_tr").toggle();
+			$(".diff_td").toggle();
+			$(".diff_tr_odd").toggle();
+			$(".diff_html").toggle();
 		}
 	</script>
 </body>

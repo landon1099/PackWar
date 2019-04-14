@@ -1,18 +1,32 @@
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+
 import org.tmatesoft.svn.core.SVNCommitInfo;
 import org.tmatesoft.svn.core.SVNDepth;
 import org.tmatesoft.svn.core.SVNDirEntry;
 import org.tmatesoft.svn.core.SVNException;
+import org.tmatesoft.svn.core.SVNURL;
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.internal.wc.DefaultSVNOptions;
 import org.tmatesoft.svn.core.io.SVNRepository;
+import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.ISVNOptions;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
+import org.tmatesoft.svn.core.wc.SVNDiffClient;
+import org.tmatesoft.svn.core.wc.SVNRevision;
+import org.tmatesoft.svn.core.wc.SVNStatus;
+import org.tmatesoft.svn.core.wc.SVNStatusClient;
+import org.tmatesoft.svn.core.wc.SVNStatusType;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
 
@@ -79,6 +93,54 @@ public class Test {
         return result;
     }
 
+//    @org.junit.Test
+    public void testDoDiff() throws SVNException, IOException {
+
+        DAVRepositoryFactory.setup();
+        SVNRepositoryFactoryImpl.setup();
+        FSRepositoryFactory.setup();
+//        SVNRepository repository = SVNRepositoryFactory.create(SVNURL.parseURIEncoded("D:\\meWorkStation\\HeimaShop"));
+        ISVNAuthenticationManager authManager =  SVNWCUtil.createDefaultAuthenticationManager( "" , "" );
+//        repository.setAuthenticationManager( authManager );
+		SVNDiffClient svnDiffClient = new SVNDiffClient(authManager, null);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//		FileOutputStream fos = new FileOutputStream(new File("D:/test.txt"));
+		File file = new File("D:\\meWorkStation\\HeimaShop\\src\\新建文本文档.txt");
+		svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.COMMITTED, SVNRevision.WORKING, true, true, baos);
+//		svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.WORKING, SVNRevision.COMMITTED,  SVNDepth.INFINITY, false, baos );
+//		SVNUpdateClient updateClient = new SVNUpdateClient(authManager,	SVNWCUtil.createDefaultOptions(true));
+//		System.out.println(fos.write());
+		System.out.println(baos.toString());
+//		fos.close();
+//		fos.flush();
+//		Iterator<SVNDiffStatus> it = changes.iterator();
+//		while(it.hasNext()){
+//			SVNDiffStatus change = it.next();
+//			System.out.println(exportPath+ change.getPath());
+//			File destination = new File( exportPath + change.getPath());
+//			updateClient.doExport(change.getURL(), destination,	this.endingRevision, this.endingRevision, null, true,SVNDepth.INFINITY);
+//		}
+		
+//		setFileText(versionFile,endingRevision.toString());
+
+    }
     
+    //测试本地svn文件状态
+    @org.junit.Test
+    public void test11(){
+    	SVNClientManager ourClientManager = SVNClientManager.newInstance(null, null, null); 
+        File compFile = new File("D:\\meWorkStation\\HeimaShop\\src\\新建文本文档.txt");
+        SVNStatusClient statusClient = ourClientManager.getStatusClient();
+        SVNStatus doStatus = null;
+		try {
+			doStatus = statusClient.doStatus(compFile, false);
+			SVNStatusType nodeStatus = doStatus.getContentsStatus();
+			if (!SVNStatusType.STATUS_NORMAL.equals(nodeStatus)) {
+				System.out.println("---"+ nodeStatus +"---：");
+			}
+		} catch (SVNException e) {
+				e.printStackTrace();
+		}
+    }
     
 }

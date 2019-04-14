@@ -124,7 +124,6 @@ public class SvnServiceImpl implements SvnService {
 	                	logBean.setAuthor(svnlogentry.getAuthor());//作者
 	                	logBean.setDate(format.format(svnlogentry.getDate()));//日期
 	                	logBean.setInfo(svnlogentry.getMessage());//日志信息
-	                	
 	                	Map<String, SVNLogEntryPath> changedPaths = svnlogentry.getChangedPaths();
 	                	Map<String, String> tmpMap = new HashMap<>();
 	                	for (Entry<String, SVNLogEntryPath> entry : changedPaths.entrySet()) {
@@ -338,6 +337,9 @@ public class SvnServiceImpl implements SvnService {
         return result;
     }
 
+    /**
+     * svn上传文件
+     */
 	@Override
 	public String uploadFile(File file, SvnLoginBean loginBean) {
 		String result = "";
