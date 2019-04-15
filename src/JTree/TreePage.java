@@ -114,6 +114,7 @@ public class TreePage {
 							createGenTree(gFilePath);
 						} else {
 							msg(msg);
+							createGenTree(gFilePath);
 						}
 					}
 				} else {

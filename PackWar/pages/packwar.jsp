@@ -1772,7 +1772,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var password = $("#acc_password").val();
 				var warPath = $("#warPath").val();
 				if ($.trim(name) == "" || $.trim(password) == "") {
-					toastr.warning("账号密码为空!");
+					toastr.error("账号密码为空!");
 					return;
 				}
 				bootbox.confirm({ 
