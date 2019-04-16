@@ -142,10 +142,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<table class="table table-bordered">
 			<tbody>
 				<tr>
-					<th width="12%">
+					<th width="10%" style="text-align:right">
 						<span style="color: red;">项目目录：</span>
 					</th>
-					<td width="38%">
+					<td width="40%">
 						<div class="input-group">
 							<textarea id="local_addr" name="local_addr" class="form-control" rows="1" style="width:100%" 
 								onkeyup="getProDirs('local_addr')" >${local_addr }</textarea>
@@ -166,10 +166,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</div>
 						</div>
  					</td>
- 					<th>
+ 					<th width="10%" style="text-align:right">
 						<span style="color: red;">升级包目录：</span>
 					</th>
-					<td>
+					<td width="40%">
 						<div class="input-group">
 							<textarea id="pack_addr" name="pack_addr" class="form-control" rows="1" style="width:100%" 
 								onkeyup="getProDirs('pack_addr')" >${pack_addr }</textarea>
@@ -215,7 +215,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
  					</td>
 				</tr>
 				<tr>
-					<th>
+					<th style="text-align:right">
 						设置文件名称：
 					</th>
 					<td style="font-weight:bold;">
@@ -253,7 +253,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</div> -->
 						</div>
 					</td>
-					<th>生成文件地址：</th>
+					<th style="text-align:right">生成文件地址：</th>
 					<td style="font-weight:bold;">
 						<div class="input-group">
 							<textarea id="warPath" name="warPath" onclick="clickCopy('warPath')" class="form-control" rows="1" style="width:100%;color:#089426" placeholder="打包后，点击此处打开生成文件目录。"></textarea>
@@ -314,7 +314,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								<input type="radio" id="remote_svn" name="_svn" onclick="modelClick(this);"/>
 								<label for="remote_svn" style="font-weight:bold">远程SVN:</label>
 							</div>
-							<button id="local_cnfm_btn" class="btn btn-info" type="submit" onclick="getProFiles()" style="float:left; margin-left:230px; font-size:16px;">确认</button>
+							<button id="local_cnfm_btn" class="btn btn-info" type="submit" onclick="getProFiles()" style="float:left; margin-left:272px; font-size:16px;">确认</button>
 							<button id="local_pack_btn" class="btn btn-primary" type="submit" onclick="getChecked('EuiTree')"style="float:left; margin-left:80px; font-size:16px;">打包</button>
 							<div class="input-group-btn" id="remote_div" style="float:left;padding-right:33px;display:none">
 								<button id="svn_addr_btn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="svn项目路径">
@@ -621,14 +621,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					}
    					
    					if (JSON.stringify(data.diffMap) != JSON.stringify({})) {
+   						$(".diff_tr").remove();
+   						$(".diff_head").remove();
+   						$(".diff_html").remove();
+   						$(".diff_tr_odd").remove();
    						var html = 
-    						"<tr style='background-color:#c4c5c763;font-weight:bold;'>" +
+    						"<tr class='diff_head' style='background-color:#c4c5c763;font-weight:bold;'>" +
 	    						"<td>序号</td>" +
 	    						"<td colspan='2'>文件列表</td>" +
 	    						"<td><a href='javascript:void(0)' onclick='tDiffList()' style='color:#ec5a05'>Toggle</a></td>" +
 	    					"</tr>" ;
 	    				var count = 1;
    						for (var key in data.diffMap) {
+   							
    							var fileNm = key.split("/")[key.split("/").length - 1];
    							var clas = "diff_tr";
    							if (count%2 == 0) {
@@ -636,7 +641,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    							}
    							if (data.diffMap[key] != "none") {
 	   							var info = data.diffMap[key];
-    							html +=
+	   							
+	   							$("#diff_point").before("<input type='hidden' id='html_input_"+ count +"' value=''>");
+	   							$("#html_input_" + count).val(info);
+    							
+	   							html +=
 	    							"<tr class='"+ clas +"'>" +
 			    						"<td>"+ count +"</td>" +
 			    						"<td colspan='2'>"+ key +"</td>" +
@@ -646,7 +655,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			    					"</tr>" +
     								"<tr class='diff_html' id='html_tr_"+ count +"' flag='0'>" +
 	    								"<td class='diff_td' colspan='4'><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")' style='float:right;margin-right: 60px;'>[x]</a></b>" +
-	    								"<input type='hidden' id='html_input_"+ count +"' value='"+ info +"'>" +
+	    								/* "<input type='hidden' id='html_input_"+ count +"' value='"+ info +"'>" + */
 	    								"<span id='html_span_"+ count +"' class='diff_span' ></span><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")' style='float:right;margin-right: 60px;'>[x]</a></b></td>" +
 	    							"</tr>" ;
    							} else {

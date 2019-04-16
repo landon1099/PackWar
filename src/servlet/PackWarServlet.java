@@ -1470,10 +1470,10 @@ public class PackWarServlet extends BaseServlet {
 				File file = new File(entry.getKey());
 				baos = new ByteArrayOutputStream();
 				try {
-					svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.COMMITTED, SVNRevision.WORKING, true, true, baos);
+					svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.COMMITTED, SVNRevision.WORKING, true, false, baos);
 				} catch (SVNException e) {
-					e.printStackTrace();
-					System.out.println("==errorin PackWarServlet.getDiff()  svnDiffClient.doDiff()");
+//					e.printStackTrace();
+					System.out.println("==errorin PackWarServlet.getDiff().doDiff() :请连接内网，获取文件修改信息！");
 				}
 				diffMap.put(entry.getKey(), baos.toString("UTF-8"));
 				baos.close();
