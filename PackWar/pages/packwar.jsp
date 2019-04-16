@@ -125,7 +125,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    text-align: left;
 		    padding-left: 145px;
 		    padding-top: 20px;
-		    font-weight: bold;
+		    font-family: Consolas;
 		}
   	</style>
   </head>
@@ -221,9 +221,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<td style="font-weight:bold;">
 						<div class="input-group">
 							<input id="webRootName" class="form-control" style="width:39%" readonly="readonly"	/>
-							<input id="update_type" class="form-control" style="width:16%" onclick="changeType(this)" value="SIT" />
+							<input id="update_type" class="form-control" style="width:16%;color:red;" onclick="changeType(this)" value="SIT" />
 							<input id="time_str" class="form-control" style="width:25%" />
-							<select id="num_str" class="form-control" style="width:20%" value="">
+							<select id="num_str" class="form-control" style="width:20%;color:red;" value="">
 								<option>01</option>
 								<option>02</option>
 								<option>03</option>
@@ -256,7 +256,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<th style="text-align:right">生成文件地址：</th>
 					<td style="font-weight:bold;">
 						<div class="input-group">
-							<textarea id="warPath" name="warPath" onclick="clickCopy('warPath')" class="form-control" rows="1" style="width:100%;color:#089426" placeholder="打包后，点击此处打开生成文件目录。"></textarea>
+							<textarea id="warPath" name="warPath" onclick="openWar('warPath')" class="form-control" rows="1" style="width:100%;color:#089426" placeholder="打包后，点击此处打开生成文件目录。"></textarea>
 							<div class="input-group-btn">
 								<button id="gen_pro_btn" type="button" class="btn btn-default dropdown-toggle mbtn" data-toggle="dropdown" title="删除文件">
 									<b style="color:red">o</b>
@@ -641,28 +641,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    							}
    							if (data.diffMap[key] != "none") {
 	   							var info = data.diffMap[key];
-	   							
-	   							$("#diff_point").before("<input type='hidden' id='html_input_"+ count +"' value=''>");
-	   							$("#html_input_" + count).val(info);
-    							
 	   							html +=
 	    							"<tr class='"+ clas +"'>" +
 			    						"<td>"+ count +"</td>" +
-			    						"<td colspan='2'>"+ key +"</td>" +
+			    						"<td colspan='2'><a class='diff_a' onclick='openFile(\""+ key +"\")'>"+ key +"</a></td>" +
 			    						"<td>" +
-			    							"<a class='diff_a' href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")'>"+ fileNm +"</a>" +
+			    							"<a class='diff_a' href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\",\""+ key +"\")'>"+ fileNm +"</a>" +
 			    						"</td>" +
 			    					"</tr>" +
     								"<tr class='diff_html' id='html_tr_"+ count +"' flag='0'>" +
-	    								"<td class='diff_td' colspan='4'><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")' style='float:right;margin-right: 60px;'>[x]</a></b>" +
+	    								"<td class='diff_td' colspan='4'><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\", \"\")' style='float:right;margin-right: 60px;'>[x]</a></b>" +
 	    								/* "<input type='hidden' id='html_input_"+ count +"' value='"+ info +"'>" + */
-	    								"<span id='html_span_"+ count +"' class='diff_span' ></span><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\")' style='float:right;margin-right: 60px;'>[x]</a></b></td>" +
+	    								"<span id='html_span_"+ count +"' class='diff_span' ></span><b><a href='javascript:void(0)' onclick='tDiffHtml(\"html_tr_"+ count +"\", \"\")' style='float:right;margin-right: 60px;'>[x]</a></b></td>" +
 	    							"</tr>" ;
    							} else {
    								html += 
 	    							"<tr class='"+ clas +"'>" +
 			    						"<td>"+ count +"</td>" +
-			    						"<td colspan='2'>"+ key +"</td>" +
+			    						"<td colspan='2'><a class='diff_a' onclick='openFile(\""+ key +"\")'>"+ key +"</a></td>" +
 			    						"<td id='td_"+ key +"'>" +
 			    							"<b>"+ fileNm +"</b>" +
 			    						"</td>" +
@@ -1065,7 +1061,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             });
 		}
 		
-		function clickCopy(id){
+		function openFile(path) {
+			$.post('<%=path%>/pack?method=openDir',
+       			{"path":path},
+       			function(data){
+       				if(data.result == 1){
+       					toastr.error("地址不存在！");
+       				}
+       			}
+       		);
+		}
+		
+		function openWar(id){
 			var path = $.trim($("#" + id).val());
 			bootbox.confirm({ 
 				size: "small",
@@ -1849,14 +1856,35 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             ); 
 		}
 		
-		function tDiffHtml(id) {
+		function tDiffHtml(id, path) {
 			var no = id.replace("html_tr_", "");
 			var flag = $("#" + id).attr('flag');
+			var isGet = $("#" + id).attr('isGet');
 			if (flag == 0) {
-				var info = $("#html_input_" + no).val();
-				$("#html_span_" + no).text(info);
-				$("#" + id).show();
+				if (isGet != 1) {
+					$.ajax({
+						type : "post",
+						dataType : "json",
+						url : "<%=path%>/pack?method=getDiff",
+						data : {
+							"path" : path
+						},
+						success : function(data){
+							if (data.status == 1) {
+								$("#html_span_" + no).text(data.diff);
+								$("#" + id).attr('isGet', 1);
+							}
+							if (data.status == 0) {
+								toastr.error("获取修改信息失败！");
+							}
+						},
+						error : function(e){
+							toastr.error("获取修改信息失败！");
+						}
+					});
+				}
 				$("#" + id).attr('flag', 1);
+				$("#" + id).show();
 			} else {
 				$("#" + id).hide();
 				$("#" + id).attr('flag', 0);

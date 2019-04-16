@@ -28,29 +28,31 @@ import org.tmatesoft.svn.core.wc.SVNStatusClient;
 import org.tmatesoft.svn.core.wc.SVNStatusType;
 import org.tmatesoft.svn.core.wc.SVNWCUtil;
 
+import com.sun.jna.platform.win32.WinDef.CHAR;
+
 
 public class Test {
 	
 	public static void main(String[] args) throws SVNException {
-		
-		DAVRepositoryFactory.setup(); 
-	    SVNRepositoryFactoryImpl.setup();
-		File impDir = new File("D:\\新建文件夹\\新建文件夹 (2)");
-		SVNClientManager ourClientManager = null;
-		try {
-			ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
-			ourClientManager = SVNClientManager.newInstance((DefaultSVNOptions) options, "may", "may"); 
-			//svn-加入
-			ourClientManager.getWCClient().doAdd(new File[] { impDir },false,false,false,SVNDepth.fromRecurse(true),false,false,true);
-			//svn-提交
-			SVNCommitInfo doCommit = ourClientManager.getCommitClient().doCommit(new File[] { impDir }, true, "", null, null, true, false, SVNDepth.INFINITY);
-			System.out.println(doCommit.toString());
-			//svn-加入-添加版本控制
-			//SVNCommitInfo commitInfo = ourClientManager.getCommitClient().doImport(impDir, SVNURL.parseURIEncoded("file:///D:/local_svn/trunk/HeimaShop/新建文本文档.txt"),"import operation!",null, false,false,SVNDepth.INFINITY); 
-		} catch (SVNException e) {
-			System.out.println("==errorin SvnServiceImpl.uploadFile：上传失败！");
-			e.printStackTrace();
-		}
+		System.out.println(Character.valueOf('+'));
+//		DAVRepositoryFactory.setup(); 
+//	    SVNRepositoryFactoryImpl.setup();
+//		File impDir = new File("D:\\新建文件夹\\新建文件夹 (2)");
+//		SVNClientManager ourClientManager = null;
+//		try {
+//			ISVNOptions options = SVNWCUtil.createDefaultOptions(true);
+//			ourClientManager = SVNClientManager.newInstance((DefaultSVNOptions) options, "may", "may"); 
+//			//svn-加入
+//			ourClientManager.getWCClient().doAdd(new File[] { impDir },false,false,false,SVNDepth.fromRecurse(true),false,false,true);
+//			//svn-提交
+//			SVNCommitInfo doCommit = ourClientManager.getCommitClient().doCommit(new File[] { impDir }, true, "", null, null, true, false, SVNDepth.INFINITY);
+//			System.out.println(doCommit.toString());
+//			//svn-加入-添加版本控制
+//			//SVNCommitInfo commitInfo = ourClientManager.getCommitClient().doImport(impDir, SVNURL.parseURIEncoded("file:///D:/local_svn/trunk/HeimaShop/新建文本文档.txt"),"import operation!",null, false,false,SVNDepth.INFINITY); 
+//		} catch (SVNException e) {
+//			System.out.println("==errorin SvnServiceImpl.uploadFile：上传失败！");
+//			e.printStackTrace();
+//		}
 	}
 	
 	/**
@@ -125,7 +127,7 @@ public class Test {
     }
     
     //测试本地svn文件状态
-    @org.junit.Test
+//    @org.junit.Test
     public void test11(){
     	SVNClientManager ourClientManager = SVNClientManager.newInstance(null, null, null); 
         File compFile = new File("D:\\meWorkStation\\HeimaShop\\src\\新建文本文档.txt");

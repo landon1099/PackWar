@@ -2,14 +2,20 @@ package servlet;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -251,7 +257,7 @@ public class PackWarServlet extends BaseServlet {
 			changedList.addAll(tempList);
 		}
 		String jsonData = getJSONString(projectUrl, changedList, version);
-		Map<String, String> diffMap = getDiff(getVsionFiles(doDiffMap));
+		Map<String, String> diffMap = getVsionFiles(doDiffMap);
 		
 		//计算运行用时
 		double endTime = System.currentTimeMillis();
@@ -1459,31 +1465,71 @@ public class PackWarServlet extends BaseServlet {
 	}
 	
 	@SuppressWarnings("deprecation")
-	public static Map<String, String> getDiff(Map<String, String> map) throws IOException {
+	public static void getDiff(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		int status = 1;
+		String path = request.getParameter("path");
 		FSRepositoryFactory.setup();
 		ISVNAuthenticationManager authManager =  null;
 		SVNDiffClient svnDiffClient = new SVNDiffClient(authManager, null);
-		ByteArrayOutputStream baos = null;
-		Map<String, String> diffMap = new HashMap<>();
-		for (Entry<String, String> entry : map.entrySet()) {
-			if ("modified".equals(entry.getValue())) {
-				File file = new File(entry.getKey());
-				baos = new ByteArrayOutputStream();
-				try {
-					svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.COMMITTED, SVNRevision.WORKING, true, false, baos);
-				} catch (SVNException e) {
-//					e.printStackTrace();
-					System.out.println("==errorin PackWarServlet.getDiff().doDiff() :请连接内网，获取文件修改信息！");
-				}
-				diffMap.put(entry.getKey(), baos.toString("UTF-8"));
-				baos.close();
-//				System.out.println("==baos.tostring() + "+baos.toString());
-			} else {
-				diffMap.put(entry.getKey(), "none");
+		String diff = "";
+		File file = new File(path);
+		File diffTxt = new File(PackWarServlet.class.getResource("/diff.txt").getPath());
+		OutputStream out = null;
+		try {
+			out = new FileOutputStream(diffTxt);
+			try {
+				svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.COMMITTED, SVNRevision.WORKING, true, false, out);
+			} catch (SVNException e) {
+				status = 0;
+				System.out.println("==errorin PackWarServlet.getDiff().doDiff() :请连接内网，获取文件修改信息！");
+			}
+		} catch (Exception e) {
+			status = 0;
+		} finally {
+			if (out != null) {
+				out.flush();
+				out.close();
 			}
 		}
 		
-		return diffMap;
+		InputStreamReader in = null;
+		BufferedReader br = null;
+		StringBuffer sb = null;
+		try {
+			in = new InputStreamReader(new FileInputStream(PackWarServlet.class.getResource("/diff.txt").getPath()),"UTF-8");
+			br = new BufferedReader(in);
+			String line;
+			sb = new StringBuffer();
+			while ((line = br.readLine()) != null) {
+				//char(43) +   char(45) -   添加三个空格
+				if (line.length() > 1) {
+					if (line.charAt(0) == 43 && line.charAt(1) != 43 && 
+							line.charAt(1) != 32 && line.charAt(1) != 9) {
+						line = line.substring(0, 1) + "    " + line.substring(1, line.length());
+					}
+					if (line.charAt(0) == 45 && line.charAt(1) != 45 && 
+							line.charAt(1) != 32 && line.charAt(1) != 9) {
+						line = line.substring(0, 1) + "    " + line.substring(1, line.length());
+					}
+				}
+				sb.append(line + "\r\n");
+			}
+		} catch (Exception e) {
+			status = 0;
+		} finally {
+			if (br != null) {
+				br.close();
+			}
+			if (in != null) {
+				in.close();
+			}
+		}
+		clearInfoForFile(diffTxt);
+		JSONObject json = new JSONObject();
+		json.put("diff", sb.toString() == null ? "" : sb.toString());
+		json.put("status", status);
+		response.setContentType("text/html;charset=UTF-8");
+		response.getWriter().write(json.toString());
 	}
 	
 	public static Map<String, String> getVsionFiles(Map<String, String> doDiffMap) {
