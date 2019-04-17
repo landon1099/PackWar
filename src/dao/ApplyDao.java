@@ -4,7 +4,6 @@ import java.sql.SQLException;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.ScalarHandler;
-import org.junit.Test;
 
 import bean.ApplyBean;
 import utils.DataSourceUtils;
@@ -36,7 +35,7 @@ public class ApplyDao {
 		
 		return result;
 	}
-	@Test
+//	@Test
 	public void updateApply() throws SQLException {
 		QueryRunner runner = new QueryRunner(DataSourceUtils.getDataSource());
 		String sql = "update release_application set fbwdlj=?,fbblj=? where fbsqh=?";
