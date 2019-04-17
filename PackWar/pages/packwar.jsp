@@ -391,15 +391,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<input type="button" class="btn-info" id="upload_remote" onclick="uploadFile()" value="上传升级包">
 					</td>
 				</tr>
+				<tr id="diff_point"></tr>
 				<!-- 设置SVN升级包地址 -->
 				<tr class="svnDirs" style="background-color:#f8fbf8;display:">
 					<th colspan="4">
-						<div class="input-group" style="float:left;padding-left:120px;padding-right:13px;padding-top:6px">
+						<div class="input-group" style="float:left;padding-left:16px;padding-right:13px;padding-top:6px">
 							<label>设置SVN升级包地址：</label>
 						</div>
 						<div class="input-group-btn" id="svnDirs_div" style="float:left;padding-right:33px;">
 							<button id="svnDirs_addr_btn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="svn升级包路径">
-								<b>&#8595;</b>
+								<b>选择</b>
 							</button>
 							<ul id="svnDirs_addr_pro" class="dropdown-menu pull-left" >
 								<c:forEach items="${svn_addr_list }" var="pro">
@@ -407,7 +408,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								</c:forEach>
 							</ul>
 						</div>
-						<div class="input-group" style="float:left;width:800px">
+						<div class="input-group" style="float:left;width:860px;padding-left: 20px;">
 							<textarea id="svnDirs_addr" name="svnDirs_addr" class="form-control" rows="1" style="width:100%" 
 								onkeyup="getProDirs('svnDirs_addr')" ></textarea>
 							<div class="input-group-btn" >
@@ -424,7 +425,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						</div>
 					</th>
 				</tr>
-				<tr id="diff_point"></tr>
 			</tbody>
 		</table>
 		
@@ -628,8 +628,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    						var html = 
     						"<tr class='diff_head' style='background-color:#c4c5c763;font-weight:bold;'>" +
 	    						"<td>序号</td>" +
-	    						"<td colspan='2'>文件列表</td>" +
-	    						"<td><a href='javascript:void(0)' onclick='tDiffList()' style='color:#ec5a05'>Toggle</a></td>" +
+	    						"<td colspan='2'>文件地址</td>" +
+	    						"<td>文件名</td>" +
+	    					"</tr>" ;
+	    				var tgleHtml = 
+	    					"<tr class='diff_foot' style='background-color:#c4c5c763;font-weight:bold;'>" +
+		    					"<td colspan='4'>" +
+									"<a href='javascript:void(0)' onclick='tDiffList()' style='color:#ec5a05'>Toggle</a>" +
+								"</td>" +
 	    					"</tr>" ;
 	    				var count = 1;
    						for (var key in data.diffMap) {
@@ -667,6 +673,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    							count++;
    						}
 	    				$("#diff_point").before(html);
+	    				$("#diff_point").before(tgleHtml);
    					}
    					
    					$("#div-a").css("display", "block");
@@ -1896,6 +1903,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$(".diff_td").toggle();
 			$(".diff_tr_odd").toggle();
 			$(".diff_html").toggle();
+			$(".diff_head").toggle();
 		}
 	</script>
 </body>
