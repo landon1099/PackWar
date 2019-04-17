@@ -344,15 +344,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<tr class="localmodel" style="background-color:#f8fbf8;">
 					<td colspan="4">
 						<a class="notice">步骤： </a>
-						<a class="notice">项目目录</a>→
-						<a class="notice">升级包目录</a>→
-						<a class="notice">设置文件名称</a>→
-						<a class="notice">确认</a>→
-						<a class="notice">核对勾选</a>→
-						<a class="notice">打包</a>→&nbsp;&nbsp;&nbsp;
-						<input type="button" class="btn-success" id="upload" onclick="uploadFile()" value="上传升级包">&nbsp;&nbsp;&nbsp;→
-						<a class="notice" onclick="showApply()" style="cursor:pointer;">部署申请</a>
-						<a class="notice" onclick="insertApply()" style="cursor:pointer;">测试数据库</a>
+						<a class="notice">①项目目录</a>→
+						<a class="notice">②升级包目录</a>→
+						<a class="notice">③设置文件名称</a>→
+						<a class="notice">④确认</a>→
+						<a class="notice">⑤核对勾选</a>→
+						<a class="notice">⑥打包</a>→&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn-success" id="upload" onclick="uploadFile()" value="⑦上传升级包">&nbsp;&nbsp;&nbsp;→
+						<input type="button" class="btn-success" onclick="showApply()" value="⑧升级申请">&nbsp;&nbsp;&nbsp;→
+						<a class="notice" onclick="insertApply()" style="cursor:pointer;">测试</a>
 					</td>
 				</tr>
 				<%-- <tr class="upload" style="background-color:#f8fbf8;">
@@ -381,51 +381,117 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<tr class="svnmodel" style="background-color:#f8fbf8;">
 					<td colspan="4">
 						<a class="notice">步骤： </a>
-						<a class="notice">选择 Svn 路径</a>→
-						<a class="notice">提交时间</a>→
-						<a class="notice">查询</a>→
-						<a class="notice">勾选版本</a>→
-						<a class="notice">确认核对</a>→
-						<a class="notice">核对勾选</a>→
-						<a class="notice">打包</a>→&nbsp;&nbsp;&nbsp;
-						<input type="button" class="btn-info" id="upload_remote" onclick="uploadFile()" value="上传升级包">
+						<a class="notice">①选择 Svn 路径</a>→
+						<a class="notice">②提交时间</a>→
+						<a class="notice">③查询</a>→
+						<a class="notice">④勾选版本</a>→
+						<a class="notice">⑤确认核对</a>→
+						<a class="notice">⑥核对勾选</a>→
+						<a class="notice">⑦打包</a>→&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn-success" id="upload_remote" onclick="uploadFile()" value="⑧上传升级包">
 					</td>
 				</tr>
 				<tr id="diff_point"></tr>
-				<!-- 设置SVN升级包地址 -->
-				<tr class="svnDirs" style="background-color:#f8fbf8;display:">
-					<th colspan="4">
-						<div class="input-group" style="float:left;padding-left:16px;padding-right:13px;padding-top:6px">
-							<label>设置SVN升级包地址：</label>
-						</div>
-						<div class="input-group-btn" id="svnDirs_div" style="float:left;padding-right:33px;">
-							<button id="svnDirs_addr_btn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="svn升级包路径">
-								<b>选择</b>
-							</button>
-							<ul id="svnDirs_addr_pro" class="dropdown-menu pull-left" >
-								<c:forEach items="${svn_addr_list }" var="pro">
-									<li><a id="${pro }" href="javascript:selectSvn('${pro }','svnDirs_addr');">${pro }</a></li>
-								</c:forEach>
-							</ul>
-						</div>
-						<div class="input-group" style="float:left;width:860px;padding-left: 20px;">
-							<textarea id="svnDirs_addr" name="svnDirs_addr" class="form-control" rows="1" style="width:100%" 
-								onkeyup="getProDirs('svnDirs_addr')" ></textarea>
-							<div class="input-group-btn" >
-								<button type="button" class="btn btn-default"  title="上层目录"
-									onclick="deleteUri('svnDirs_addr')">&#8593;
-								</button>
-							</div>
-							<div class="input-group-btn">
-								<button id="add_svnDirs_addr" type="button" class="btn btn-default dropdown-toggle" title="下层目录"
-									data-toggle="dropdown" >&#8595;
-								</button>
-								<ul id="svnDirs_pro" class="dropdown-menu pull-right"></ul>
-							</div>
-						</div>
-					</th>
-				</tr>
 			</tbody>
+		</table>
+		
+		<table id="apply_tb" class="table table-bordered svnDirs" style="font-size: 13px;">
+			<tr style="background-color:#f8fbf8;display:">
+				<th style="text-align:right">发布包路径：</th>
+				<th colspan="7">
+					<div class="input-group-btn" id="svnDirs_div" style="float:left;padding-right:33px;">
+						<button id="svnDirs_addr_btn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="svn升级包路径">
+							<b>选择</b>
+						</button>
+						<ul id="svnDirs_addr_pro" class="dropdown-menu pull-left" >
+							<c:forEach items="${svn_addr_list }" var="pro">
+								<li><a id="${pro }" href="javascript:selectSvn('${pro }','svnDirs_addr');">${pro }</a></li>
+							</c:forEach>
+						</ul>
+					</div>
+					<div class="input-group" style="float:left;width:80%;padding-left: 20px;">
+						<textarea id="svnDirs_addr" name="svnDirs_addr" class="form-control" rows="1" style="width:100%" 
+							onkeyup="getProDirs('svnDirs_addr')" ></textarea>
+						<div class="input-group-btn" >
+							<button type="button" class="btn btn-default"  title="上层目录"
+								onclick="deleteUri('svnDirs_addr')">&#8593;
+							</button>
+						</div>
+						<div class="input-group-btn">
+							<button id="add_svnDirs_addr" type="button" class="btn btn-default dropdown-toggle" title="下层目录"
+								data-toggle="dropdown" >&#8595;
+							</button>
+							<ul id="svnDirs_pro" class="dropdown-menu pull-right"></ul>
+						</div>
+					</div>
+					<div class="input-group">
+						<button id="confirm_svnurl" type="button" class="btn btn-info" title="确认发布包地址" style="margin-left: 46px;">确认地址</button>
+					</div>
+				</th>
+			</tr>
+			<tr style="background-color:#f8fbf8;display:">
+				<th style="text-align:right;color:red;">发布申请号：</th>
+				<td colspan="3">
+					<textarea id="fbsqh" name="fbsqh" class="form-control" rows="1" style="width:100%"></textarea>
+				</td>
+				<th style="text-align:right">发布文档地址：</th>
+				<td colspan="3">
+					<textarea id="fbwdlj" name="fbwdlj" class="form-control" rows="1" style="width:100%"></textarea>
+				</td>
+			</tr>
+			<tr style="background-color:#f8fbf8;display:">
+				<th style="text-align:right;">来源编号：</th>
+				<td colspan="3">
+					<textarea id="lybh" name="lybh" class="form-control" rows="1" style="width:100%"></textarea>
+				</td>
+				<th style="text-align:right">发布内容简述：</th>
+				<td colspan="3">
+					<textarea id="fbnrjs" name="fbnrjs" class="form-control" rows="1" style="width:100%"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<th width="10%" style="text-align:right">升级环境：</th>
+				<td width="15%"><input id="fwqip" name="fwqip" class="form-control" placeholder=""></td>
+				<th width="10%" style="text-align:right">紧急程度：</th>
+				<td width="15%">
+					<select id="jjcd" name="jjcd" class="form-control" placeholder="">
+						<option value="">正常</option>
+						<option value="">紧急</option>
+					</select>
+				</td>
+				<th width="10%" style="text-align:right">紧急审批人员：</th>
+				<td width="15%"><input id="" class="form-control" placeholder="" value="无"></td>
+				<th width="10%" style="text-align:right">紧急审批方式：</th>
+				<td width="15%"><input id="" class="form-control" placeholder="" value="无"></td>
+			</tr>
+			<tr>
+				<th style="text-align:right">系统支持人员：</th>
+				<td><input id="" class="form-control" placeholder="" value="张超"></td>
+				<th style="text-align:right">验证人员：</th>
+				<td><input id="" class="form-control" placeholder="" value="李明"></td>
+				<th style="text-align:right">开始时间：</th>
+				<td>
+			        <div class="date form_datetime" data-link-field="xwkssj">
+	                    <input id="_xwkssj" class="form-control" size="20" type="text" value="" style="font-weight:bold">
+						<span class="add-on"><i class="icon-th"></i></span>
+	                </div>
+			        <input type="hidden" class="form-control" id="xwkssj" name="xwkssj">
+				</td>
+				<th style="text-align:right">完成时间：</th>
+				<td>
+			        <div class="date form_datetime" data-link-field="xwjssj">
+	                    <input id="_xwjssj" class="form-control" size="20" class="form-control" type="text" value="" style="font-weight:bold">
+						<span class="add-on"><i class="icon-th"></i></span>
+	                </div>
+			        <input type="hidden" class="form-control" id="xwjssj" name="xwjssj">
+				</td>
+			</tr>
+			<tr>
+				<th colspan="8">
+					<button id="submitBtn" type="button" class="btn btn-info" title="提交发布申请" style="margin-left: 46px;">去发布</button>
+					<a onclick="javascript:$('#apply_tb').hide();" style="color:#ec5a05;float:right;">Toggle</a>
+				</th>
+			</tr>
 		</table>
 		
 		<table class="table table-bordered svnmodel" id="svn_search" style="width:68%;margin:auto;font-size:14px;margin-bottom:20px">
@@ -528,12 +594,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		
 		function clock(){
-			$("#end").val(curDateTime());
+			$("#end").val(curDateTime(0));
 		}
 		
 		//获取当前时间
-		function curDateTime() {
+		function curDateTime(Minutes) {
 			var d = new Date();
+			d.setMinutes(d.getMinutes() + Minutes);
 			var year = d.getFullYear();
 			var month = d.getMonth() + 1;
 			var date = d.getDate();
@@ -1301,7 +1368,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				toastr.warning("请输入开始时间！");
 				return;
 			}
-			if (compareDate(begin, curDateTime())) {
+			if (compareDate(begin, curDateTime(0))) {
 				toastr.warning("提交时间必须小于当前时间");
 				return;
 			}
@@ -1323,7 +1390,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					"password" : acc_password,
 					"rootUrl" : rootUrl,
 					"begin" : begin,
-					"end" : curDateTime()
+					"end" : curDateTime(0)
 				},
 				success : function(data){
 					var logInfos = data.logInfos
@@ -1629,7 +1696,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 			$("#delete_list").empty();
 			$("#change_list").empty();
-			$("#end").val(curDateTime());
+			$("#end").val(curDateTime(0));
 			var projectUrl = $("#local_addr").val();
 			if (projectUrl == "" || projectUrl == null) {
 				toastr.warning("请选择项目目录！");
@@ -1905,6 +1972,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$(".diff_html").toggle();
 			$(".diff_head").toggle();
 		}
+		
+		$("#confirm_svnurl").click(function(){
+			var war_url = $("#svnDirs_addr").val();
+			war_url = war_url.replaceAll("\\\\", "/");
+			if (war_url.endWith("/")) {
+				war_url = war_url.substring(0, war_url.length - 1);
+			}
+			
+			var fbsqh = war_url.split("/")[war_url.split("/").length - 1];
+			$("#fbsqh").val(fbsqh);// 发布申请号
+			
+			if (fbsqh.split("_")[1] == "SIT" || fbsqh.split("-")[1] == "SIT") {
+				$("#fwqip").val("测试");
+			}
+			if (fbsqh.split("_")[1] == "LIV" || fbsqh.split("-")[1] == "LIV") {
+				$("#fwqip").val("生产");
+			}
+			
+			war_url = war_url.substring(0, war_url.lastIndexOf("/"));
+			$("#fbwdlj").text(war_url);// 发布文档地址
+			
+			$("#_xwkssj").val(curDateTime(0));
+			$("#xwkssj").val(curDateTime(0));
+			$("#_xwjssj").val(curDateTime(30));
+			$("#xwjssj").val(curDateTime(30));
+			
+		});
+		
 	</script>
 </body>
 

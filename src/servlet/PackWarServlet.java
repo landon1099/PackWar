@@ -1474,9 +1474,9 @@ public class PackWarServlet extends BaseServlet {
 		String diff = "";
 		File file = new File(path);
 		File diffTxt = new File(PackWarServlet.class.getResource("/diff.txt").getPath());
-		OutputStream out = null;
+		BufferedOutputStream out = null;
 		try {
-			out = new FileOutputStream(diffTxt);
+			out = new BufferedOutputStream(new FileOutputStream(diffTxt));
 			try {
 				svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.COMMITTED, SVNRevision.WORKING, true, false, out);
 			} catch (SVNException e) {
