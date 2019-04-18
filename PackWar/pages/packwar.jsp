@@ -125,13 +125,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		    text-align: left;
 		    padding-left: 145px;
 		    padding-top: 20px;
-		    font-family: Consolas;
+		}
+		.font_c {
+			font-family: Consolas;
+		}
+		.font_diy {
+			font-family: 微软雅黑;
 		}
   	</style>
   </head>
   
   <body>
-	<div class="all" width="100%">
+	<div class="all font_c" width="100%">
 		<input id="local_addr_nm" name="local_addr_nm" type="hidden" value="">
 		<input id="svn_addr_nm" name="svn_addr_nm" type="hidden" value="">
 		<input id="EuiTree_addr" name="EuiTree_addr" type="hidden" value="">
@@ -341,7 +346,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<button class="btn btn-primary" type="submit" onclick="getChecked('EuiTreeTwo')">自动打包</button>
 					</td>
 				</tr>
-				<tr class="localmodel" style="background-color:#f8fbf8;">
+				<tr class="localmodel font_diy" style="background-color:#f8fbf8;">
 					<td colspan="4">
 						<a class="notice">步骤： </a>
 						<a class="notice">①项目目录</a>→
@@ -378,7 +383,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<input type="button" class="btn-success" id="upload" onclick="" value="上传升级包">
 					</td>
 				</tr> --%>
-				<tr class="svnmodel" style="background-color:#f8fbf8;">
+				<tr class="svnmodel font_diy" style="background-color:#f8fbf8;">
 					<td colspan="4">
 						<a class="notice">步骤： </a>
 						<a class="notice">①选择 Svn 路径</a>→
