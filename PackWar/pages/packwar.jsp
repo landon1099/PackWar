@@ -63,7 +63,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			cursor: pointer; 
 		}
 		.mbtn {
-			padding-left: 10px;
+			padding-left: 12px;
+			width:102%;
 		}
 		.table-hover>tbody>tr:hover {
 			background-color: rgb(255, 250, 205, 0.6)!important;
@@ -86,8 +87,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		.notice {
 			font-weight:bold;
-			padding-right:20px;
-			padding-left:20px;
+			padding-right:10px;
+			padding-left:10px;
 		}
 		ul {
 			margin-bottom:0;
@@ -152,7 +153,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</th>
 					<td width="40%">
 						<div class="input-group">
-							<textarea id="local_addr" name="local_addr" class="form-control" rows="1" style="width:100%" 
+							<textarea id="local_addr" name="local_addr" class="form-control" rows="2" style="width:100%;font-weight:bold;" 
 								onkeyup="getProDirs('local_addr')" >${local_addr }</textarea>
 							<div class="input-group-btn" >
 								<button type="button" class="btn btn-default"  title="上层目录"
@@ -176,7 +177,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					</th>
 					<td width="40%">
 						<div class="input-group">
-							<textarea id="pack_addr" name="pack_addr" class="form-control" rows="1" style="width:100%" 
+							<textarea id="pack_addr" name="pack_addr" class="form-control" rows="2" style="width:100%;font-weight:bold;" 
 								onkeyup="getProDirs('pack_addr')" >${pack_addr }</textarea>
 							<div class="input-group-btn">
 								<button type="button" class="btn btn-default" title="上层目录"
@@ -261,10 +262,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					<th style="text-align:right">生成文件地址：</th>
 					<td style="font-weight:bold;">
 						<div class="input-group">
-							<textarea id="warPath" name="warPath" onclick="openWar('warPath')" class="form-control" rows="1" style="width:100%;color:#089426" placeholder="打包后，点击此处打开生成文件目录。"></textarea>
+							<textarea id="warPath" name="warPath" class="form-control" rows="2" style="width:100%;color:#089426;font-weight:bold;" placeholder="点击蓝色按钮打开文件目录，点击红色按钮可选择删除文件。"></textarea>
+							<div class="input-group-btn">
+								<button id="openWar" type="button" class="btn btn-default mbtn" onclick="openWar('warPath')" title="打开生成文件目录">
+									<b style="color:blue">O</b>
+								</button>
+							</div>
 							<div class="input-group-btn">
 								<button id="gen_pro_btn" type="button" class="btn btn-default dropdown-toggle mbtn" data-toggle="dropdown" title="删除文件">
-									<b style="color:red">o</b>
+									<b style="color:red">X</b>
 								</button>
 								<ul id="gen_pro" class="dropdown-menu pull-right">
 									<c:forEach items="${pack_addr_list }" var="pro">
@@ -331,8 +337,22 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 									</c:forEach>
 								</ul>
 							</div>
-							<textarea id="svn_addr" name="svn_addr" type="text" class="form-control" rows="1" style="float:left;width:68%;display:none;font-weight:bold;" placeholder="输入 SVN 项目根目录">${svn_addr }</textarea>
-							<div class="input-group-btn svnmodel" id="remote_account" style="float:left;">
+							<textarea id="svn_addr" name="svn_addr" type="text" class="form-control svnmodel" rows="1" style="float:left;width:60%;display:none;font-weight:bold;" 
+								onkeyup="getProDirs('svn_addr')" placeholder="输入 SVN 项目目录"></textarea>
+							<div class="input-group svnmodel" style="float:left;">
+								<div class="input-group-btn" >
+									<button type="button" class="btn btn-default"  title="上层目录"
+										onclick="deleteUri('svn_addr')">&#8593;
+									</button>
+								</div>
+								<div class="input-group-btn">
+									<button id="add_svn_addr" type="button" class="btn btn-default dropdown-toggle" title="下层目录"
+										data-toggle="dropdown" >&#8595;
+									</button>
+									<ul id="svn_addr_pro" class="dropdown-menu pull-right"></ul>
+								</div>
+							</div>
+							<div class="input-group-btn svnmodel" id="remote_account" style="float:left;padding-left:20px">
 								<button id="account" type="button" class="btn btn-default" title="设置svn账号">账号</button>
 							</div>
 						</div>
@@ -356,7 +376,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<a class="notice">⑤核对勾选</a>→
 						<a class="notice">⑥打包</a>→&nbsp;&nbsp;&nbsp;
 						<input type="button" class="btn-success" id="upload" onclick="uploadFile()" value="⑦上传升级包">&nbsp;&nbsp;&nbsp;→
-						<input type="button" class="btn-success" onclick="showApply()" value="⑧升级申请">&nbsp;&nbsp;&nbsp;→
+						<input type="button" class="btn-info" onclick="showApply()" value="⑧升级部署申请">&nbsp;&nbsp;&nbsp;→
 						<a class="notice" onclick="insertApply()" style="cursor:pointer;">测试</a>
 					</td>
 				</tr>
@@ -393,7 +413,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<a class="notice">⑤确认核对</a>→
 						<a class="notice">⑥核对勾选</a>→
 						<a class="notice">⑦打包</a>→&nbsp;&nbsp;&nbsp;
-						<input type="button" class="btn-success" id="upload_remote" onclick="uploadFile()" value="⑧上传升级包">
+						<input type="button" class="btn-success" id="upload_remote" onclick="uploadFile()" value="⑧上传升级包">&nbsp;&nbsp;&nbsp;→
+						<input type="button" class="btn-info" onclick="showApply()" value="⑧升级部署申请">
 					</td>
 				</tr>
 				<tr id="diff_point"></tr>
@@ -695,6 +716,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    					if (JSON.stringify(data.diffMap) != JSON.stringify({})) {
    						$(".diff_tr").remove();
    						$(".diff_head").remove();
+   						$(".diff_foot").remove();
    						$(".diff_html").remove();
    						$(".diff_tr_odd").remove();
    						var html = 
@@ -784,6 +806,15 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					toastr.warning("未填写账号密码！");
 				}
 				break;
+			case "svn_addr":
+				name = $("#acc_name").val();
+				password = $("#acc_password").val();
+				if ($.trim(name) != "" && $.trim(password) != "") {
+					svnDirs_addr = $("#svn_addr").val();
+				} else {
+					toastr.warning("未填写账号密码！");
+				}
+				break;
 			default:
 				break;
 			}
@@ -803,6 +834,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 		$("#svnDirs_pro").empty();
                 		$.each(data.svnDirs_addr_list,function(index,value){
                 			$("#svnDirs_pro").append("<li><a href=\"javascript:addUri('"+value+"', 'svnDirs_addr');\">"+value+"</a></li>");
+                		});
+                	}
+                	if (data.flag!=0 && id=='svn_addr') {
+                		$("#svn_addr_pro").empty();
+                		$.each(data.svnDirs_addr_list,function(index,value){
+                			$("#svn_addr_pro").append("<li><a href=\"javascript:addUri('"+value+"', 'svn_addr');\">"+value+"</a></li>");
                 		});
                 	}
                 	if (data.flag!=0 && id=='pack_addr') {
@@ -1662,6 +1699,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$("#" + id).val(url);
 			if(id == "svnDirs_addr"){
 				getProDirs('svnDirs_addr');
+			}
+			if(id == "svn_addr"){
+				getProDirs('svn_addr');
 			}
 		}
 		

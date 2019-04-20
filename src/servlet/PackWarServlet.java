@@ -1471,32 +1471,26 @@ public class PackWarServlet extends BaseServlet {
 		FSRepositoryFactory.setup();
 		ISVNAuthenticationManager authManager =  null;
 		SVNDiffClient svnDiffClient = new SVNDiffClient(authManager, null);
-		String diff = "";
 		File file = new File(path);
-		File diffTxt = new File(PackWarServlet.class.getResource("/diff.txt").getPath());
-		BufferedOutputStream out = null;
+//		File diffTxt = new File(PackWarServlet.class.getResource("/diff.txt").getPath());
+		ByteArrayOutputStream baos = null;
 		try {
-			out = new BufferedOutputStream(new FileOutputStream(diffTxt));
+			baos = new ByteArrayOutputStream();
 			try {
-				svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.COMMITTED, SVNRevision.WORKING, true, false, out);
+				svnDiffClient.doDiff(file, SVNRevision.COMMITTED, SVNRevision.COMMITTED, SVNRevision.WORKING, true, false, baos);
 			} catch (SVNException e) {
 				status = 0;
 				System.out.println("==errorin PackWarServlet.getDiff().doDiff() :请连接内网，获取文件修改信息！");
 			}
 		} catch (Exception e) {
 			status = 0;
-		} finally {
-			if (out != null) {
-				out.flush();
-				out.close();
-			}
 		}
 		
 		InputStreamReader in = null;
 		BufferedReader br = null;
 		StringBuffer sb = null;
 		try {
-			in = new InputStreamReader(new FileInputStream(PackWarServlet.class.getResource("/diff.txt").getPath()),"UTF-8");
+			in = new InputStreamReader(new ByteArrayInputStream(baos.toByteArray()));
 			br = new BufferedReader(in);
 			String line;
 			sb = new StringBuffer();
@@ -1524,7 +1518,7 @@ public class PackWarServlet extends BaseServlet {
 				in.close();
 			}
 		}
-		clearInfoForFile(diffTxt);
+//		clearInfoForFile(diffTxt);
 		JSONObject json = new JSONObject();
 		json.put("diff", sb.toString() == null ? "" : sb.toString());
 		json.put("status", status);
