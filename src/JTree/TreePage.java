@@ -45,6 +45,7 @@ public class TreePage {
 			rootNode.add(sNode);
 		}
 		DefaultTreeModel model = new DefaultTreeModel(rootNode);
+		tree.setFont(new Font("Microsoft YaHei", Font.PLAIN, 15));
 		tree.addMouseListener(new CheckBoxTreeNodeSelectionListener());
 		tree.setModel(model);
 		tree.setCellRenderer(new CheckBoxTreeCellRenderer());
@@ -53,14 +54,15 @@ public class TreePage {
 		panel.add(scroll);
         //项目目录 标签
         JLabel gLabel = new JLabel("包名称:");
+        gLabel.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
         gLabel.setForeground(Color.red);
-        gLabel.setFont(new Font(null, Font.BOLD, 15));
+        gLabel.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
         gLabel.setLocation(20, 10);
         gLabel.setSize(60, 25);
         panel.add(gLabel);
         //生成文件名称  升级包名称
         final JTextField webrootNm = new JTextField(20);
-        webrootNm.setFont(new Font(null, Font.BOLD, 14));
+        webrootNm.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
         webrootNm.setLocation(100, 10);
         webrootNm.setSize(160, 25);
         webrootNm.setEditable(false);
@@ -80,7 +82,7 @@ public class TreePage {
         final Date date = new Date();
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         JTextField warDate = new JTextField(sdf.format(date));
-        warDate.setFont(new Font(null, Font.BOLD, 14));
+        warDate.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
         warDate.setLocation(320, 10);
         warDate.setSize(100, 25);
         panel.add(warDate);
@@ -92,6 +94,7 @@ public class TreePage {
         panel.add(countCB);
         
 		JButton packBtn = new JButton("打包");
+		packBtn.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
 		packBtn.setLocation(500, 10);
 		packBtn.setSize(60, 25);
 		panel.add(packBtn);
@@ -143,6 +146,7 @@ public class TreePage {
 			rootNode.add(sNode);
 		}
 		DefaultTreeModel model = new DefaultTreeModel(rootNode);
+		tree.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
 		tree.addMouseListener(new CheckBoxTreeNodeSelectionListener());
 		tree.setModel(model);
 		tree.setCellRenderer(new CheckBoxTreeCellRenderer());
@@ -165,6 +169,7 @@ public class TreePage {
 		panel.add(scroll);
 		//打开目录
 		JButton expandBtn = new JButton("打开目录");
+		expandBtn.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
 		expandBtn.setLocation(20, 10);
 		expandBtn.setSize(100, 25);
 		panel.add(expandBtn);
