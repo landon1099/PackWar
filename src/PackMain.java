@@ -3,8 +3,8 @@ import java.awt.EventQueue;
 
 import javax.swing.UIManager;
 
+import swing.page.MainPage;
 import freeseawind.lf.LittleLuckLookAndFeel;
-import JTree.MainPage;
 
 
 public class PackMain {

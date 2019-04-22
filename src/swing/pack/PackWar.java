@@ -1,4 +1,4 @@
-package JTree;
+package swing.pack;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

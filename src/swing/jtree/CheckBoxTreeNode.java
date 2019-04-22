@@ -1,4 +1,4 @@
-package JTree;
+package swing.jtree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 public class CheckBoxTreeNode extends DefaultMutableTreeNode{

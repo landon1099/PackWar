@@ -1,4 +1,4 @@
-package JTree;
+package swing.jtree;
  
 import java.awt.Color;
 import java.awt.Component;

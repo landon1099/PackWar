@@ -6,3 +6,4 @@
 *.mymetadata
 **/META-INF/
 **/classes/
+src/config.properties

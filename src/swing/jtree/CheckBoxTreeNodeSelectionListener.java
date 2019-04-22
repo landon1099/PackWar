@@ -1,4 +1,4 @@
-package JTree;
+package swing.jtree;
  
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
