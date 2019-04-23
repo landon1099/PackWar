@@ -38,7 +38,7 @@ import bean.SvnBean;
 
 public class PackWar {
 	
-	public static List<String> checkLocalSvn(String path) throws SVNException, IOException {
+	public List<String> checkLocalSvn(String path) throws SVNException, IOException {
 //		double startTime = System.currentTimeMillis();
 		//获取路径下项目所有文件列表
 //		List<String> fileList = new ArrayList<String>();
@@ -86,7 +86,7 @@ public class PackWar {
 	 * @param path
 	 * @param type
 	 */
-	public static List<String> getUrls(String path, int type, List<String> list) {
+	public List<String> getUrls(String path, int type, List<String> list) {
 		if (!new File(path).exists()) {
 			System.out.println("---errorin getUrls---目录不存在"+path);
 			return null;
@@ -122,7 +122,7 @@ public class PackWar {
 		return list;
 	}
 	
-	public static double getVersion(List<String> fileList) {
+	public  double getVersion(List<String> fileList) {
 		double version = 0.0;
 		for (String url : fileList) {
 			if (url.endsWith(".class")) {
@@ -176,7 +176,7 @@ public class PackWar {
 	 * @throws IOException
 	 * @throws SVNException 
 	 */
-	public static List<String> checkSvn(List<String> changedList, String projectUrl)
+	public  List<String> checkSvn(List<String> changedList, String projectUrl)
 			throws SVNException, IOException {
 		List<String> tmpList = new ArrayList<>();
 		File dirFile = new File(projectUrl);
@@ -220,7 +220,7 @@ public class PackWar {
 	 * @throws IOException
 	 * @throws SVNException 
 	 */
-	public static Boolean isFileChanged(String url) {
+	public  Boolean isFileChanged(String url) {
 		Boolean resultBoolean = false;
 		SVNClientManager ourClientManager = SVNClientManager.newInstance(null, null, null); 
         File compFile = new File(url);
@@ -243,7 +243,7 @@ public class PackWar {
 	}
 	
 	
-	public static String packWar(String pPath, String gPath, List<String> cList, List<String> strList) {
+	public  String packWar(String pPath, String gPath, List<String> cList, List<String> strList) {
 		PropertiesUtil pros = new PropertiesUtil();
 		pros.setValue("swing_pro_tmp", pPath);
 		pros.setValue("swing_gen_tmp", gPath);
@@ -284,7 +284,7 @@ public class PackWar {
 		}
 	}
 	
-	public static String getWebroot(String path) {
+	public  String getWebroot(String path) {
 		//获取路径下项目所有文件列表
 		List<String> fileList = new ArrayList<String>();
 		fileList = getUrls(path, 1, fileList);
@@ -308,7 +308,7 @@ public class PackWar {
 	 * 生成war包文件
 	 * @param path
 	 */
-	public static String generateWar(String path, PackBean packBean) {
+	public  String generateWar(String path, PackBean packBean) {
 		String backupPath = path;
 		String projectName = packBean.getProjectName();
 		String webRootName = packBean.getWebRootName();
@@ -370,7 +370,7 @@ public class PackWar {
 	 * @param path
 	 * @param generate_path
 	 */
-	public static void copyFile(String path, String generate_path) {
+	public  void copyFile(String path, String generate_path) {
 		FileInputStream input = null;
 		FileOutputStream output = null;
 		BufferedInputStream bis = null;

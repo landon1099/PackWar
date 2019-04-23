@@ -39,14 +39,14 @@ public class MainPage {
 	/**
 	 * 创建主页面
 	 */
-    public static void CreateJFrame() {
+    public  void CreateJFrame() {
         JFrame frame = new JFrame("PackWar");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); //关闭所有界面
         final JPanel panel = new JPanel(null);
         //项目目录 标签
         JLabel proUrl = new JLabel("项目目录：");
         proUrl.setForeground(Color.red);
-        proUrl.setFont(new Font(null, Font.BOLD, 15));
+        proUrl.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
         proUrl.setLocation(10, 40);
         proUrl.setSize(100, 25);
         panel.add(proUrl);
@@ -57,11 +57,12 @@ public class MainPage {
         if (StringUtils.isNotBlank(pPath)  && new File(pPath).exists()) {
         	proText.setText(pPath);
 		}
-        proText.setFont(new Font(null, Font.BOLD, 14));
+        proText.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
         proText.setLocation(100, 40);
         proText.setSize(660, 25);
         panel.add(proText);
         final JButton pBtn = new JButton("选择");
+        pBtn.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
         pBtn.setLocation(780, 40);
         pBtn.setSize(80, 25);
         panel.add(pBtn);
@@ -92,13 +93,13 @@ public class MainPage {
         //生成目录 标签
         JLabel genUrl = new JLabel("生成目录：");
         genUrl.setForeground(Color.red);
-        genUrl.setFont(new Font(null, Font.BOLD, 15));
+        genUrl.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
         genUrl.setLocation(10, 140);
         genUrl.setSize(100, 25);
         panel.add(genUrl);
         //生成目录  输入框
         final JTextField genText = new JTextField(60);
-        genText.setFont(new Font(null, Font.BOLD, 14));
+        genText.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
         genText.setLocation(100, 140);
         genText.setSize(660, 25);
         String gPath = pros.getValue("swing_gen_tmp");
@@ -107,6 +108,7 @@ public class MainPage {
         }
         panel.add(genText);
         final JButton gBtn = new JButton("选择");
+        gBtn.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
         gBtn.setLocation(780, 140);
         gBtn.setSize(80, 25);
         panel.add(gBtn);
@@ -136,11 +138,11 @@ public class MainPage {
         });
         //单选按钮
         JRadioButton radio1 = new JRadioButton("不校验");
-        radio1.setFont(new Font(null, Font.BOLD, 14));
+        radio1.setFont(new Font("Microsoft YaHei", Font.BOLD, 14));
         radio1.setLocation(350, 220);
         radio1.setSize(100, 25);
         JRadioButton radio2 = new JRadioButton("本地SVN");
-        radio2.setFont(new Font(null, Font.BOLD, 14));
+        radio2.setFont(new Font("Microsoft YaHei", Font.BOLD, 14));
         radio2.setLocation(450, 220);
         radio2.setSize(100, 25);
         // 创建按钮组，把两个单选按钮添加到该组
@@ -151,7 +153,7 @@ public class MainPage {
         panel.add(radio1);
         panel.add(radio2);
         JButton confirmBtn = new JButton("确认");
-        confirmBtn.setFont(new Font(null, Font.BOLD, 15));
+        confirmBtn.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
         confirmBtn.setLocation(385, 300);
         confirmBtn.setSize(100, 25);
         confirmBtn.addActionListener(new ActionListener() {
@@ -196,14 +198,17 @@ public class MainPage {
 	            		pros.setValue("swing_gen_addr", _genText);//保存生成目录
 	            		String text = jrb.getText();
 	            		List<String> cList = null;
+	            		TreePage treePage = new TreePage();
 	            		switch (text) {
 	            		case "不校验":
-	            			TreePage.createTree(pPath, gPath, new ArrayList<String>());
+	            			treePage.createTree(pPath, gPath, new ArrayList<String>());
 	            			break;
 	            		case "本地SVN":
+	            			PackWar packWar = null;
 	            			try {
-								cList = PackWar.checkLocalSvn(pPath);
-								TreePage.createTree(pPath, gPath, cList);
+	            				packWar = new PackWar();
+								cList = packWar.checkLocalSvn(pPath);
+								treePage.createTree(pPath, gPath, cList);
 							} catch (SVNException e1) {
 								e1.printStackTrace();
 							} catch (IOException e1) {
@@ -226,7 +231,7 @@ public class MainPage {
         frame.setLocationRelativeTo(null);
     }
     
-    public static Boolean isPathExist(String path) {
+    public  Boolean isPathExist(String path) {
 		return new File(path).exists();
 	}
 	
@@ -234,7 +239,7 @@ public class MainPage {
 	 * 警告提示框
 	 * @param msg
 	 */
-    public static void msg(String msg) {
+    public  void msg(String msg) {
     	if (JOptionPane.OK_OPTION==JOptionPane
     			.showOptionDialog(null, msg, "提示", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[]{"确认"}, null)){
 //    		System.out.println("ok");
@@ -249,7 +254,7 @@ public class MainPage {
      * @param confrim 确认
      * @param cancel 取消
      */
-    public static void msgTwo(String title, String msg, String confrim, String cancel) {
+    public  void msgTwo(String title, String msg, String confrim, String cancel) {
     	Object[] options ={ confrim, cancel };  //自定义按钮上的文字
     	int m = JOptionPane.showOptionDialog(null, msg, title,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); 
     }

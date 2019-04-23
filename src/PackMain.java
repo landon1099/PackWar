@@ -14,9 +14,10 @@ public class PackMain {
 		
 		EventQueue.invokeLater(new Runnable(){
             public void run(){
+            	MainPage mainPage = new MainPage();
                 try{
                 	UIManager.setLookAndFeel(LittleLuckLookAndFeel.class.getName());
-                	MainPage.CreateJFrame();
+                	mainPage.CreateJFrame();
                 }
                 catch (Exception e){
                     e.printStackTrace();

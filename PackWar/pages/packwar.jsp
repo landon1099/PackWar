@@ -32,8 +32,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<script type="text/javascript" src="<%=path%>/scripts/js/serializeForm.js"></script>
 		
   	<style>
-  		.div-a{ float:left;width:50%;margin-bottom: 30px;margin-top: 10px;background-color: #FCFCFC;display:none} 
-		.div-b{ float:left;width:50%;margin-bottom: 30px;margin-top: 10px;background-color: #FCFCFC;display:none}
+  		.div-a{ float:left;width:50%;margin-bottom: 30px;margin-top: 10px;background-color: #FCFCFC;display:none;} 
+		.div-b{ float:left;width:50%;margin-bottom: 30px;margin-top: 10px;background-color: #FCFCFC;display:none;}
 		th{text-align: right;background-color: #F5F5F5}
 		.trBtn{background-color: #F5F5F5}
 		.span{color:red;font-weight:bold;}
@@ -133,6 +133,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		.font_diy {
 			font-family: 微软雅黑;
 		}
+		.tree-title {
+    		font-size: 15px;
+    	}
   	</style>
   </head>
   

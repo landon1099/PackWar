@@ -36,7 +36,7 @@ import swing.pack.PackWar;
 
 public class TreePage {
 	
-	public static void createTree(final String path, final String gPath, List<String> list) {
+	public void createTree(final String path, final String gPath, List<String> list) {
 		JFrame frame = new JFrame("勾选确认");
 		frame.setBounds(100, 50, 600, 610);
 		frame.setLocationRelativeTo(null);
@@ -50,6 +50,7 @@ public class TreePage {
 			rootNode.add(sNode);
 		}
 		DefaultTreeModel model = new DefaultTreeModel(rootNode);
+		tree.setFont(new Font("Microsoft YaHei", Font.PLAIN, 15));
 		tree.addMouseListener(new CheckBoxTreeNodeSelectionListener());
 		tree.setModel(model);
 		tree.setCellRenderer(new CheckBoxTreeCellRenderer());
@@ -58,21 +59,23 @@ public class TreePage {
 		panel.add(scroll);
         //项目目录 标签
         JLabel gLabel = new JLabel("包名称:");
+        gLabel.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
         gLabel.setForeground(Color.red);
-        gLabel.setFont(new Font(null, Font.BOLD, 15));
+        gLabel.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
         gLabel.setLocation(20, 10);
         gLabel.setSize(60, 25);
         panel.add(gLabel);
         //生成文件名称  升级包名称
         final JTextField webrootNm = new JTextField(20);
-        webrootNm.setFont(new Font(null, Font.BOLD, 14));
+        webrootNm.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
         webrootNm.setLocation(100, 10);
         webrootNm.setSize(160, 25);
         webrootNm.setEditable(false);
-        if (PackWar.getWebroot(path) == null) {
+        final PackWar packWar = new PackWar();
+        if (packWar.getWebroot(path) == null) {
         	msg("无法识别【WEB-INF】目录！");
 		} else {
-			webrootNm.setText(PackWar.getWebroot(path));
+			webrootNm.setText(packWar.getWebroot(path));
 		}
         panel.add(webrootNm);
         // 创建一个下拉列表框
@@ -85,7 +88,7 @@ public class TreePage {
         final Date date = new Date();
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         JTextField warDate = new JTextField(sdf.format(date));
-        warDate.setFont(new Font(null, Font.BOLD, 14));
+        warDate.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
         warDate.setLocation(320, 10);
         warDate.setSize(100, 25);
         panel.add(warDate);
@@ -97,6 +100,7 @@ public class TreePage {
         panel.add(countCB);
         
 		JButton packBtn = new JButton("打包");
+		packBtn.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
 		packBtn.setLocation(500, 10);
 		packBtn.setSize(60, 25);
 		panel.add(packBtn);
@@ -114,7 +118,7 @@ public class TreePage {
 						String msg = "文件名已存在【更改名称序号】or【删除重名文件】：" + gFilePath;
 						msgTwo("提示:", msg, "打开目录", "取消", gFilePath);
 					} else {
-						String msg = PackWar.packWar(path, gPath, cList, strList);
+						String msg = packWar.packWar(path, gPath, cList, strList);
 						if ("".equals(msg)) {
 							createGenTree(gFilePath);
 						} else {
@@ -134,7 +138,7 @@ public class TreePage {
 	}
 	
 	//升级包树
-	public static void createGenTree(final String path) {
+	public  void createGenTree(final String path) {
 		JFrame frame = new JFrame("升级包");
 		frame.setBounds(900, 50, 400, 610);
 		frame.setLocationRelativeTo(null);
@@ -148,6 +152,7 @@ public class TreePage {
 			rootNode.add(sNode);
 		}
 		DefaultTreeModel model = new DefaultTreeModel(rootNode);
+		tree.setFont(new Font("Microsoft YaHei", Font.PLAIN, 14));
 		tree.addMouseListener(new CheckBoxTreeNodeSelectionListener());
 		tree.setModel(model);
 		tree.setCellRenderer(new CheckBoxTreeCellRenderer());
@@ -170,6 +175,7 @@ public class TreePage {
 		panel.add(scroll);
 		//打开目录
 		JButton expandBtn = new JButton("打开目录");
+		expandBtn.setFont(new Font("Microsoft YaHei", Font.BOLD, 15));
 		expandBtn.setLocation(20, 10);
 		expandBtn.setSize(100, 25);
 		panel.add(expandBtn);
@@ -192,7 +198,7 @@ public class TreePage {
 	}
 
 	//设置【勾选确认树】
-	public static List<CheckBoxTreeNode> setNode(String path, List<String> list) {
+	public  List<CheckBoxTreeNode> setNode(String path, List<String> list) {
 		List<CheckBoxTreeNode> nodeList = new ArrayList<>();
 		File file = new File(path);
 		if (file.isDirectory()) {
@@ -230,7 +236,7 @@ public class TreePage {
 	}
 	
 	//设置【升级包树】
-	public static List<DefaultMutableTreeNode> setDefaultNode(String path) {
+	public  List<DefaultMutableTreeNode> setDefaultNode(String path) {
 		List<DefaultMutableTreeNode> nodeList = new ArrayList<>();
 		File file = new File(path);
 		if (file.isDirectory()) {
@@ -260,7 +266,7 @@ public class TreePage {
 	}
 	
 	
-	public static ArrayList<String> sortUrl(File[] files){
+	public  ArrayList<String> sortUrl(File[] files){
 		for(int i=0;i<files.length;i++){
 			for(int j=i+1;j<files.length;j++){
 				if((files[i].compareTo(files[j]))>0){
@@ -286,7 +292,7 @@ public class TreePage {
 	}
 	
 	//展开节点
-	public static void toggleNodes(JTree tree, TreePath parent, boolean expand) {
+	public  void toggleNodes(JTree tree, TreePath parent, boolean expand) {
 	    // Traverse children
 	    TreeNode node = (TreeNode) parent.getLastPathComponent();
 	    if (node.getChildCount() >= 0) {
@@ -305,7 +311,7 @@ public class TreePage {
 	}
 	
 	//获取勾选的路径
-	public static void getCheckedNodes(CheckBoxTreeNode node, List<String> list) 
+	public  void getCheckedNodes(CheckBoxTreeNode node, List<String> list) 
 	{
 	   if (node.isSelected() && !node.getAllowsChildren()) {
 		   String url = node.getUrl();
@@ -327,7 +333,7 @@ public class TreePage {
 	 * 警告提示框
 	 * @param msg
 	 */
-    public static void msg(String msg) {
+    public  void msg(String msg) {
     	if (JOptionPane.OK_OPTION==JOptionPane
     			.showOptionDialog(null, msg, "提示", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE, null, new String[]{"确认"}, null)){
 //    		System.out.println("ok");
@@ -342,7 +348,7 @@ public class TreePage {
      * @param confrim 确认
      * @param cancel 取消
      */
-    public static void msgTwo(String title, String msg, String confrim, String cancel, String path) {
+    public  void msgTwo(String title, String msg, String confrim, String cancel, String path) {
     	Object[] options ={ confrim, cancel };  //自定义按钮上的文字
     	int m = JOptionPane.showOptionDialog(null, msg, title,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]); 
     	if (!"".equals(confrim) && m == 0) {
