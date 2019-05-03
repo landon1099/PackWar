@@ -111,7 +111,10 @@ public class PackWar {
 					//过滤.开头目录
 					String fileName = fileLists[i].getName();
 					String temp = fileName.split("\\.")[0].trim();
-					if (!"".equals(temp)) {
+					// 过滤 idea 项目 out/artifacts 目录
+					path = path.replaceAll("\\\\", "/");
+					boolean isOutDir = path.contains("out/artifacts");
+					if (!"".equals(temp) && !isOutDir) {
 						getUrls(fileLists[i].getAbsolutePath(), 1, list);
 					}
 				}else {

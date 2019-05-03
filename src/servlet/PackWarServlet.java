@@ -755,6 +755,7 @@ public class PackWarServlet extends BaseServlet {
 			System.out.println("==errorin getUrls---输入的路径为文件，请选择目录！");
 			return null;
 		}
+
 		File[] fileLists = file.listFiles();
 		if (type == 0) {
 			for (int i = 0; i < fileLists.length; i++) { 
@@ -767,10 +768,13 @@ public class PackWarServlet extends BaseServlet {
 		if (type == 1) {
 			for (int i = 0; i < fileLists.length; i++) {
 				if (fileLists[i].isDirectory()) {
-					//过滤.开头目录
+					// 过滤.开头目录
 					String fileName = fileLists[i].getName();
 					String temp = fileName.split("\\.")[0].trim();
-					if (!"".equals(temp)) {
+					// 过滤 idea 项目 out/artifacts 目录
+					path = path.replaceAll("\\\\", "/");
+					boolean isOutDir = path.contains("out/artifacts");
+					if (!"".equals(temp) && !isOutDir) {
 						getUrls(fileLists[i].getAbsolutePath(), 1, list);
 					}
 				}else {
@@ -1081,7 +1085,7 @@ public class PackWarServlet extends BaseServlet {
 	
 	/**
 	 * 删除上级空目录
-	 * @param file
+	 * @param path
 	 */
 	public static void delUpDirs(String path){
 		File file = new File(path);
@@ -1429,7 +1433,7 @@ public class PackWarServlet extends BaseServlet {
 		String result = "";
 		//svn连接测试
 //		service.testSvnConnection(loginBean);
-		if (file.exists() && true) {
+		if (file.exists()) {
 			loginBean = new SvnLoginBean(name, password, warPath);
 			result = service.uploadFile(file, loginBean);
 		} else {
