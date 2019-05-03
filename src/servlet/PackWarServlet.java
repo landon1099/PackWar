@@ -778,7 +778,10 @@ public class PackWarServlet extends BaseServlet {
 						getUrls(fileLists[i].getAbsolutePath(), 1, list);
 					}
 				}else {
-					list.add(fileLists[i].getAbsolutePath().replaceAll("\\\\", "/"));
+					String url = fileLists[i].getAbsolutePath().replaceAll("\\\\", "/");
+					if (!url.endsWith(".iml")) {
+						list.add(url);
+					}
 				}
 			}
 		}
