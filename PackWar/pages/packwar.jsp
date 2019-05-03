@@ -326,7 +326,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 							</div>
 							<div class="radio icheck-primary" style="float:left;margin-left:20px;margin-right:1px"">
 								<input type="radio" id="remote_svn" name="_svn" onclick="modelClick(this);"/>
-								<label for="remote_svn" style="font-weight:bold">远程SVN:</label>
+								<label for="remote_svn" style="font-weight:bold">多人协作:</label>
 							</div>
 							<button id="local_cnfm_btn" class="btn btn-info" type="submit" onclick="getProFiles()" style="float:left; margin-left:272px; font-size:16px;">确认</button>
 							<button id="local_pack_btn" class="btn btn-primary" type="submit" onclick="getChecked('EuiTree')"style="float:left; margin-left:80px; font-size:16px;">打包</button>
@@ -341,7 +341,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 								</ul>
 							</div>
 							<textarea id="svn_addr" name="svn_addr" type="text" class="form-control svnmodel" rows="1" style="float:left;width:60%;display:none;font-weight:bold;" 
-								onkeyup="getProDirs('svn_addr')" placeholder="输入 SVN 项目目录"></textarea>
+								onkeyup="getProDirs('svn_addr')" placeholder="输入 SVN 项目代码目录地址"></textarea>
 							<div class="input-group svnmodel" style="float:left;">
 								<div class="input-group-btn" >
 									<button type="button" class="btn btn-default"  title="上层目录"
@@ -371,7 +371,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr>
 				<tr class="localmodel font_diy" style="background-color:#f8fbf8;">
 					<td colspan="4">
-						<a class="notice">步骤： </a>
+						<a class="notice">Tips： </a>
 						<a class="notice">①项目目录</a>→
 						<a class="notice">②升级包目录</a>→
 						<a class="notice">③设置文件名称</a>→
@@ -379,8 +379,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						<a class="notice">⑤核对勾选</a>→
 						<a class="notice">⑥打包</a>→&nbsp;&nbsp;&nbsp;
 						<input type="button" class="btn-success" id="upload" onclick="uploadFile()" value="⑦上传升级包">&nbsp;&nbsp;&nbsp;→
-						<input type="button" class="btn-info" onclick="showApply()" value="⑧升级部署申请">&nbsp;&nbsp;&nbsp;→
-						<a class="notice" onclick="insertApply()" style="cursor:pointer;">测试</a>
+						<input type="button" class="btn-info" onclick="showApply()" value="⑧升级部署申请">
+<!-- 						&nbsp;&nbsp;&nbsp;→<a class="notice" onclick="insertApply()" style="cursor:pointer;">测试</a> -->
 					</td>
 				</tr>
 				<%-- <tr class="upload" style="background-color:#f8fbf8;">
@@ -408,7 +408,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				</tr> --%>
 				<tr class="svnmodel font_diy" style="background-color:#f8fbf8;">
 					<td colspan="4">
-						<a class="notice">步骤： </a>
+						<a class="notice">Tips： </a>
 						<a class="notice">①选择 Svn 路径</a>→
 						<a class="notice">②提交时间</a>→
 						<a class="notice">③查询</a>→
@@ -571,7 +571,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<tr id="version_tr" style="font-weight:bold;"></tr>
 		</table>
 		
-		<!-- 远程SVN -->
+		<!-- 多人协作 -->
 		<table id="svn_tb" class="table table-hover table-bordered table-condensed table-striped svnmodel" style="width:68%;margin:auto;font-size:14px;"></table>
 		
 		<div id="footer" name="footer" style="margin-bottom: 1000px"></div>
@@ -655,7 +655,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			if (seconds < 10) {
 				seconds = "0" + seconds;
 			}
-			curDateTime += " " + hour + ":" + minute + ":" + seconds;
+			if (Minutes == 0) {
+				curDateTime += " " + hour + ":" + minute + ":" + seconds;
+			} else {
+				curDateTime += " " + hour + ":" + minute;
+			}
 			return curDateTime;
 		}
 		
@@ -1916,7 +1920,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				bootbox.confirm({ 
 				  size: "big",
 				  title: "<div style='font-size:16px;font-weight:bold;'>确认</div>",
-				  message: "<div class='text-center' style='word-wrap:break-word;font-size:14px;'><b>"+"请确认升级包目录是检出目录:</b></div><div class='text-center'><b>【升级包目录："+ $("#warPath").val() +"】"+"</b></div>",
+				  message: "<div class='text-center' style='word-wrap:break-word;font-size:14px;'><b>"+"请确认升级包目录是检出目录:</b></div><div class='text-center'><b>【升级包上传目录："+ $("#pack_addr").val() +"】"+"</b></div>",
 				  buttons: {
 		              confirm: {
 		                  label: '上传',
@@ -2021,6 +2025,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$(".diff_head").toggle();
 		}
 		
+		$("#submitBtn").click(function(){
+			window.open("http://10.10.18.10:8080"); 
+		});
+		
 		$("#confirm_svnurl").click(function(){
 			var war_url = $("#svnDirs_addr").val();
 			war_url = war_url.replaceAll("\\\\", "/");
@@ -2041,10 +2049,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			war_url = war_url.substring(0, war_url.lastIndexOf("/"));
 			$("#fbwdlj").text(war_url);// 发布文档地址
 			
-			$("#_xwkssj").val(curDateTime(0));
-			$("#xwkssj").val(curDateTime(0));
-			$("#_xwjssj").val(curDateTime(30));
-			$("#xwjssj").val(curDateTime(30));
+			$("#_xwkssj").val(curDateTime(1));
+			$("#xwkssj").val(curDateTime(1));
+			$("#_xwjssj").val(curDateTime(31));
+			$("#xwjssj").val(curDateTime(31));
 			
 		});
 		

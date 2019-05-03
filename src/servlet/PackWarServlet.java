@@ -288,8 +288,8 @@ public class PackWarServlet extends BaseServlet {
 		List<String> tmpList = new ArrayList<>();
 		File dirFile = new File(projectUrl);
 		String[] list = dirFile.list();
-		for(String fileName : list) {
-			if (".svn".equals(fileName)) {
+//		for(String fileName : list) {
+//			if (".svn".equals(fileName)) {
 				tmpList = getUrls(projectUrl, 1, tmpList);
 				for(String url : tmpList){
 					url = url.replaceAll("\\\\", "/");
@@ -306,9 +306,9 @@ public class PackWarServlet extends BaseServlet {
 						}
 					}
 				}
-				break ;
-			}
-		}
+//				break ;
+//			}
+//		}
 		return changedList;
 	}
 	
@@ -1119,7 +1119,8 @@ public class PackWarServlet extends BaseServlet {
 		} catch (SVNException e) {
 			if (!url.contains("META-INF")) {
 				resultBoolean = true;
-				e.printStackTrace();
+				System.out.println("---判断url是否版本文件抛出异常：" + url);
+//				e.printStackTrace();
 			}
 		}
         return resultBoolean;
