@@ -2056,6 +2056,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			
 		});
 		
+		$("#submitBtn").click(function(){
+			window.open("http://10.10.18.10:8080");
+		});
+		
 	</script>
 </body>
 
