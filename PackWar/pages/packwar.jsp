@@ -118,7 +118,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		}
 		.diff_span {
 			word-break:normal; 
-		    width:auto; 
+		    width:1250px; 
 		    display:block; 
 		    white-space:pre-wrap;
 		    word-wrap : break-word ;
@@ -2054,10 +2054,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$("#_xwjssj").val(curDateTime(31));
 			$("#xwjssj").val(curDateTime(31));
 			
-		});
-		
-		$("#submitBtn").click(function(){
-			window.open("http://10.10.18.10:8080");
 		});
 		
 	</script>
