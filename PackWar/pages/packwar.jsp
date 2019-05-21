@@ -935,11 +935,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			var update_type = $("#update_type").val();
 			var time_str = $("#time_str").val();
 			var num_str = $("#num_str option:selected").val();
-			webRootName = $.trim(webRootName);
+			webRootName = $.trim(webRootName).toUpperCase();
 			update_type = $.trim(update_type);
 			time_str = $.trim(time_str);
 			num_str = $.trim(num_str);
-			file_name = webRootName+"_"+update_type +"_"+time_str+"_"+num_str;
+			file_name = webRootName+"-"+update_type +"-"+time_str+"-"+num_str;
 			return file_name;
 		}
 		
@@ -1197,40 +1197,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		function openWar(id){
 			var path = $.trim($("#" + id).val());
-			bootbox.confirm({ 
-				size: "small",
-				title: "<div style='font-size:16px;font-weight:bold;'>提示</div>",
-				message: "<div class='text-center'><b>是否打开本地目录？</b></div>",
-				buttons: {
-					confirm: {
-						label: '确认',
-						className: 'btn-success'
-					},
-					cancel: {
-						label: '取消',
-						className: 'btn-default'
-					}
-				},
-				callback: function(result){
-					if (result) {
-						$.post('<%=path%>/pack?method=openDir',
-		        			{"path":path},
-		        			function(data){
-		        				if(data.result == 1){
-		        					toastr.error("地址不存在！");
-		        				}
-		        			}
-		        		);
-					} else {
-						//点击复制
-						//var input = document.getElementById(id);
-			        	//input.select();
-			        	//执行浏览器复制命令
-			        	//document.execCommand("Copy");
-						//toastr.success("复制地址成功");
-					}
-				}
-			});
+			$.post('<%=path%>/pack?method=openDir',
+      			{"path":path},
+      			function(data){
+      				if(data.result == 1){
+      					toastr.error("地址不存在！");
+      				}
+      			}
+      		);
 		}
 		
 		//删除文件，id为目录名
@@ -1313,7 +1287,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				var update_type = $("#update_type").val();
 				var time_str = $("#time_str").val();
 				var num_str = $("#num_str option:selected").val();
-				webRootName = $.trim(webRootName);
+				webRootName = $.trim(webRootName).toUpperCase();
 				update_type = $.trim(update_type);
 				time_str = $.trim(time_str);
 				num_str = $.trim(num_str);
@@ -1345,7 +1319,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	var parentNode = $("#EuiTree").tree("getParent", node.target);
 		    if(parentNode != null && parentNode != "undefined"){
 		    	$("#EuiTree").tree("expand", parentNode.target);
-		        expandParent(parentNode); 
+		        expandParent(parentNode);
 		    }  
 		};
 		
