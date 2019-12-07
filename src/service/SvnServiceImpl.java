@@ -86,7 +86,6 @@ public class SvnServiceImpl implements SvnService {
 	public List<SvnLogBean> getLogByTime(final SvnBean svnBean) {
 		setupLibrary();
 		final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        final String author = "";
         long startRevision = 0;
         long endRevision = -1; //最新版本
         final List<SvnLogBean> logBeanList = new ArrayList<SvnLogBean>();
@@ -108,13 +107,14 @@ public class SvnServiceImpl implements SvnService {
 	            		}
 	                    if (svnlogentry.getDate().after(begin) && svnlogentry.getDate().before(end)) {  
 	                        //依据提交人过滤
-	                        if (!"".equals(author)) {  
-	                            if (author.equals(svnlogentry.getAuthor())) {
-	                                fillResult(svnlogentry);
-	                            }
-	                        } else {
-	                            fillResult(svnlogentry);
-	                        }
+							String author = svnBean.getAuthor();
+							if (StringUtils.isNotBlank(author)) {
+								if (author.equals(svnlogentry.getAuthor())) {
+									fillResult(svnlogentry);
+								}
+							} else {
+								fillResult(svnlogentry);
+							}
 	                    }
 	                }
 	                public void fillResult(SVNLogEntry svnlogentry) {

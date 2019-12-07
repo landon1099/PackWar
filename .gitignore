@@ -6,6 +6,7 @@
 *.mymetadata
 **/META-INF/
 **/classes/
+**/bin/
 src/config.properties
 /PackWar.iml
 .idea/inspectionProfiles/

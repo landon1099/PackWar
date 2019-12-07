@@ -1,0 +1,156 @@
+.div-a {
+    float: left;
+    width: 50%;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    background-color: #FCFCFC;
+    display: none;
+}
+
+.div-b {
+    float: left;
+    width: 50%;
+    margin-bottom: 30px;
+    margin-top: 10px;
+    background-color: #FCFCFC;
+    display: none;
+}
+
+th {
+    text-align: right;
+    background-color: #F5F5F5
+}
+
+.trBtn {
+    background-color: #F5F5F5
+}
+
+.span {
+    color: red;
+    font-weight: bold;
+}
+
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle !important;
+}
+
+#svn_tb th, #svn_tb td {
+    vertical-align: middle !important;
+}
+
+table {
+    font-size: 15px;
+}
+
+.all {
+    margin-top: 50px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.icheckbox_square-blue, .iradio_square-blue {
+    display: block;
+    margin: -8;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    background: url(scripts/css/icheck/blue.png) no-repeat;
+    border: none;
+    cursor: pointer;
+}
+
+.mbtn {
+    padding-left: 12px;
+    width: 102%;
+}
+
+.table-hover > tbody > tr:hover {
+    background-color: rgb(255, 250, 205, 0.6) !important;
+}
+
+.warn_tr1 {
+    font-weight: bold;
+    background-color: #fffb7285;
+    font-size: 12px;
+}
+
+.warn_tr2 {
+    font-weight: bold;
+    background-color: RGB(255, 69, 0, 0.3);
+    font-size: 12px;
+}
+
+.warn_tr3 {
+    font-weight: bold;
+    /* 			background-color: RGB(255,69,0,0.3); */
+    font-size: 12px;
+    color: #0000ffc2;
+}
+
+.notice {
+    font-weight: bold;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+ul {
+    margin-bottom: 0;
+    text-align: left;
+}
+
+.svnDirs {
+    display: none;
+}
+
+.diff_a {
+    cursor: pointer;
+    color: #052cec;
+}
+
+.diff_tr {
+    font-weight: bold;
+    font-size: 8px;
+}
+
+.diff_tr_odd {
+    font-weight: bold;
+    font-size: 8px;
+    background-color: #226cf112;
+}
+
+.diff_td {
+}
+
+.diff_html {
+    display: none;
+    background-color: #8fbc8f17;
+}
+
+.diff_span {
+    word-break: normal;
+    width: 1250px;
+    display: block;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-align: left;
+    padding-left: 145px;
+    padding-top: 20px;
+}
+
+.font_c {
+    font-family: Consolas;
+}
+
+.font_diy {
+    font-family: 微软雅黑;
+}
+
+.tree-title {
+    font-size: 15px;
+}
+
+.div-center {
+    text-align:center;
+}
