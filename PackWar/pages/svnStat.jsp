@@ -1,8 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%
-    String path = request.getContextPath();
-%>
+<% String path = request.getContextPath(); %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -122,9 +120,8 @@
     function getMM_dd(month, week, tmpDay) {
         var mm_dd = "-";
         month = parseInt(month) + 1;
-        tmpDay = tmpDay + 1;
-        week = week - 1;
-        month = month + "";
+        tmpDay = parseInt(tmpDay) + 1;
+        week = parseInt(week) - 1;
         if (month <= 9) {
             mm_dd = "0" + month + mm_dd;
         } else {

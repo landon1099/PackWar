@@ -5,7 +5,7 @@
 <nav class="navbar navbar-inverse bg-inverse" role="navigation">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Nav</a>
+            <a class="navbar-brand" href="#">Nav | </a>
         </div>
         <div>
             <ul class="nav navbar-nav">

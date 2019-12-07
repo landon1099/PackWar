@@ -1,9 +1,6 @@
 <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
+<% String path = request.getContextPath(); %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -19,7 +16,6 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<link rel="stylesheet" type="text/css" href="<%=path%>/scripts/css/icheck/blue.css">
 		<link rel="stylesheet" type="text/css" href="<%=path%>/scripts/css/icheck/icheck-bootstrap.css">
 		<link rel="stylesheet" type="text/css" href="<%=path%>/scripts/css/bootstrap-datetimepicker.css">
-		
 		
 		<script type="text/javascript" src="<%=path%>/scripts/js/jquery-1.11.3.min.js"></script>
 		<script type="text/javascript" src="<%=path%>/scripts/js/jquery.easyui.min.js"></script>
@@ -471,7 +467,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		<div id="footer" name="footer" style="margin-bottom: 1000px"></div>
 	</div>
-	
+
     <script type="text/javascript">
 		
 // 		toastr.options.positionClass = 'toast-bottom-center';
