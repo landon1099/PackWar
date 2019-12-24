@@ -430,8 +430,8 @@
    						var html = 
     						"<tr class='diff_head' style='background-color:#c4c5c763;font-weight:bold;'>" +
 	    						"<td>序号</td>" +
-	    						"<td colspan='2'>文件地址</td>" +
-	    						"<td>文件名</td>" +
+	    						"<td colspan='2'>文件地址（点击可打开本地文件）</td>" +
+	    						"<td>文件名（点击可查看修改内容）</td>" +
 	    					"</tr>" ;
 	    				var tgleHtml = 
 	    					"<tr class='diff_foot' style='background-color:#c4c5c763;font-weight:bold;'>" +
