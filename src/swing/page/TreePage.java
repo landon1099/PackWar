@@ -1,7 +1,17 @@
 package swing.page;
  
-import java.awt.Color;
-import java.awt.Font;
+import org.apache.commons.lang.StringUtils;
+import swing.jtree.CheckBoxTreeCellRenderer;
+import swing.jtree.CheckBoxTreeNode;
+import swing.jtree.CheckBoxTreeNodeSelectionListener;
+import swing.pack.PackWar;
+
+import javax.swing.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreeNode;
+import javax.swing.tree.TreePath;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -12,32 +22,10 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextField;
-import javax.swing.JTree;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeNode;
-import javax.swing.tree.TreePath;
-
-import org.apache.commons.lang.StringUtils;
-import org.tmatesoft.sqljet.core.internal.lang.SqlParser.add_subexpr_return;
-
-import swing.jtree.CheckBoxTreeCellRenderer;
-import swing.jtree.CheckBoxTreeNode;
-import swing.jtree.CheckBoxTreeNodeSelectionListener;
-import swing.pack.PackWar;
-
 public class TreePage {
 	
 	public void createTree(final String path, final String gPath, List<String> list) {
-		JFrame frame = new JFrame("勾选确认");
+		JFrame frame = new JFrame("确认打包");
 		frame.setBounds(100, 50, 600, 610);
 		frame.setLocationRelativeTo(null);
         JPanel panel = new JPanel(null);
@@ -139,7 +127,7 @@ public class TreePage {
 	
 	//升级包树
 	public  void createGenTree(final String path) {
-		JFrame frame = new JFrame("升级包");
+		JFrame frame = new JFrame("升级包预览");
 		frame.setBounds(900, 50, 400, 610);
 		frame.setLocationRelativeTo(null);
         JPanel panel = new JPanel(null);

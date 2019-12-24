@@ -1,39 +1,17 @@
 package swing.pack;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
+import bean.PackBean;
 import org.apache.commons.lang.StringUtils;
-import org.tmatesoft.svn.core.ISVNLogEntryHandler;
 import org.tmatesoft.svn.core.SVNException;
-import org.tmatesoft.svn.core.SVNLogEntry;
-import org.tmatesoft.svn.core.SVNLogEntryPath;
-import org.tmatesoft.svn.core.SVNURL;
-import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
-import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
-import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
-import org.tmatesoft.svn.core.io.SVNRepository;
-import org.tmatesoft.svn.core.io.SVNRepositoryFactory;
 import org.tmatesoft.svn.core.wc.SVNClientManager;
-import org.tmatesoft.svn.core.wc.SVNRevision;
 import org.tmatesoft.svn.core.wc.SVNStatus;
 import org.tmatesoft.svn.core.wc.SVNStatusClient;
 import org.tmatesoft.svn.core.wc.SVNStatusType;
-import org.tmatesoft.svn.core.wc.SVNWCUtil;
-
 import utils.PropertiesUtil;
-import bean.PackBean;
-import bean.SvnBean;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class PackWar {
@@ -59,7 +37,7 @@ public class PackWar {
 //		version = getVersion(fileList);
 		
 		//校验本地SVN
-		List<String> changedList = new ArrayList<>();
+		List<String> changedList = new ArrayList<String>();
 		changedList = checkSvn(changedList, path);
 		return changedList;
 		
@@ -184,7 +162,7 @@ public class PackWar {
 	 */
 	public  List<String> checkSvn(List<String> changedList, String projectUrl)
 			throws SVNException, IOException {
-		List<String> tmpList = new ArrayList<>();
+		List<String> tmpList = new ArrayList<String>();
 		File dirFile = new File(projectUrl);
 		String[] list = dirFile.list();
 		for(String fileName : list) {

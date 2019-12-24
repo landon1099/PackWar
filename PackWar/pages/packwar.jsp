@@ -67,7 +67,7 @@
 						</div>
  					</td>
  					<th width="10%" style="text-align:right">
-						<span style="color: red;">升级包目录：</span>
+						<span style="color: red;">升级文件目录：</span>
 					</th>
 					<td width="40%">
 						<div class="input-group">
@@ -89,30 +89,6 @@
 							</div>
 						</div>
 					</td>
-					
- 					<!-- TODO 待删除 -->
-					<!-- <th width="12%">对比文件目录<span style="color: red;">：</span></th> -->
-					<td width="38%" style="display:none">
-						<div class="input-group">
-							<textarea id="svn_addr_0" name="svn_addr_0" class="form-control" rows="1" style="width:100%" 
-								onkeyup="getProDirs('svn_addr')" >${svn_addr }</textarea>
-							<div class="input-group-btn">
-								<button type="button" class="btn btn-default" title="上层目录"
-									onclick="deleteUri('svn_addr')">&#8593;
-								</button>
-							</div>
-							<div class="input-group-btn">
-								<button id="add_svn_addr" type="button" class="btn btn-default dropdown-toggle" title="下层目录"
-									data-toggle="dropdown" >&#8595;
-								</button>
-								<ul id="svn_pro" class="dropdown-menu pull-right">
-									<c:forEach items="${svn_addr_list }" var="pro">
-										<li><a href="javascript:addUri('${pro }', 'svn_addr');">${pro }</a></li>
-									</c:forEach>
-								</ul>
-							</div>
-						</div>
- 					</td>
 				</tr>
 				<tr>
 					<th style="text-align:right">
@@ -120,7 +96,7 @@
 					</th>
 					<td style="font-weight:bold;">
 						<div class="input-group">
-							<input id="webRootName" class="form-control" style="width:39%" readonly="readonly"	/>
+							<input id="webRootName" class="form-control" style="width:39%" readonly="readonly" placeholder="自动生成，无法手动修改。"	/>
 							<input id="update_type" class="form-control" style="width:16%;color:red;" onclick="changeType(this)" value="SIT" />
 							<input id="time_str" class="form-control" style="width:25%" />
 							<select id="num_str" class="form-control" style="width:20%;color:red;" value="">
@@ -143,62 +119,26 @@
 								<option>17</option>
 								<option>18</option>
 							</select>
-							<!-- <span class="input-group-addon">
-                        		<input id="check_model" name="check_model" type="checkbox" checked="checked">
-                        	</span> -->
-							<!-- <div class="input-group-btn">
-								<button type="button" class="btn btn-default mbtn" title="修改名称" onclick="modifyName('modify')">
-									<b style="color:#00BFFF">o</b>
-								</button>
-							</div> -->
 						</div>
 					</td>
 					<th style="text-align:right">生成文件地址：</th>
 					<td style="font-weight:bold;">
 						<div class="input-group">
-							<textarea id="warPath" name="warPath" class="form-control" rows="2" style="width:100%;color:#089426;font-weight:bold;" placeholder="点击蓝色按钮打开文件目录，点击红色按钮可选择删除文件。"></textarea>
+							<textarea id="warPath" name="warPath" class="form-control" rows="2" style="width:100%;color:#089426;font-weight:bold;" placeholder="点击蓝色按钮打开生成文件目录；点击红色按钮可选择删除本地文件。"></textarea>
 							<div class="input-group-btn">
 								<button id="openWar" type="button" class="btn btn-default mbtn" onclick="openWar('warPath')" title="打开生成文件目录">
-									<b style="color:blue">O</b>
+									<b style="color:blue">打开</b>
 								</button>
 							</div>
 							<div class="input-group-btn">
-								<button id="gen_pro_btn" type="button" class="btn btn-default dropdown-toggle mbtn" data-toggle="dropdown" title="删除文件">
-									<b style="color:red">X</b>
+								<button id="gen_pro_btn" type="button" class="btn btn-default dropdown-toggle mbtn" data-toggle="dropdown" title="可选择删除目录文件">
+									<b style="color:red">删除</b>
 								</button>
 								<ul id="gen_pro" class="dropdown-menu pull-right">
 									<c:forEach items="${pack_addr_list }" var="pro">
 										<li><a id="${pro }" href="javascript:delGenFile('${pro }');">${pro }</a></li>
 									</c:forEach>
 								</ul>
-							</div>
-						</div>
-					</td>
-				</tr>
-				
-				<!-- TODO 待删除 -->
-				<tr style="display:none">
-					<th>
-						生成文件名称：
-					</th>
-					<td>
-						<div class="input-group">
-							<textarea id="gen_nm" name="gen_nm" class="form-control" rows="1" style="width:100%" ></textarea>
-							<div class="input-group-btn">
-								<button id="gen_pro_btn" type="button" class="btn btn-default dropdown-toggle mbtn" data-toggle="dropdown" title="删除文件">
-									<b style="color:red">o</b>
-								</button>
-								<ul id="gen_pro" class="dropdown-menu pull-right">
-									<c:forEach items="${pack_addr_list }" var="pro">
-										<li><a href="javascript:delGenFile('${pro }');">${pro }</a></li>
-									</c:forEach>
-								</ul>
-							</div>
-							<div class="input-group-btn">
-								<button type="button" class="btn btn-default dropdown-toggle mbtn" data-toggle="dropdown"  title="修改名称"
-									onclick="modifyName('update')">
-									<b style="color:#00BFFF">o</b>
-								</button>
 							</div>
 						</div>
 					</td>
@@ -235,9 +175,7 @@
 								onkeyup="getProDirs('svn_addr')" placeholder="输入 SVN 项目代码目录地址"></textarea>
 							<div class="input-group svnmodel" style="float:left;">
 								<div class="input-group-btn" >
-									<button type="button" class="btn btn-default"  title="上层目录"
-										onclick="deleteUri('svn_addr')">&#8593;
-									</button>
+									<button type="button" class="btn btn-default" title="上层目录" onclick="deleteUri('svn_addr')">&#8593;</button>
 								</div>
 								<div class="input-group-btn">
 									<button id="add_svn_addr" type="button" class="btn btn-default dropdown-toggle" title="下层目录"
@@ -251,167 +189,36 @@
 							</div>
 						</div>
 					</td>
-					
-					<!-- TODO 待删除 -->
-							<!-- <button class="btn" type="submit" onclick="copyFile('EuiTree')">复制文件</button> -->
-					<td colspan="2" style='text-align: center;display: none'>
-						<button class="btn btn-info" type="submit" onclick="compareFile()">比较文件</button>
-						<!-- <button class="btn" type="submit" onclick="copyFile('EuiTreeTwo')">复制文件</button> -->
-						<button class="btn btn-primary" type="submit" onclick="getChecked('EuiTreeTwo')">自动打包</button>
-					</td>
 				</tr>
 				<tr class="localmodel font_diy" style="background-color:#f8fbf8;">
 					<td colspan="4">
 						<a class="notice">Tips： </a>
-						<a class="notice">①项目目录</a>→
-						<a class="notice">②升级包目录</a>→
+						<a class="notice">①输入项目目录</a>→
+						<a class="notice">②输入升级文件目录</a>→
 						<a class="notice">③设置文件名称</a>→
-						<a class="notice">④确认</a>→
+						<a class="notice">④点击确认</a>→
 						<a class="notice">⑤核对勾选</a>→
-						<a class="notice">⑥打包</a>→&nbsp;&nbsp;&nbsp;
-						<input type="button" class="btn-success" id="upload" onclick="uploadFile()" value="⑦上传升级包">&nbsp;&nbsp;&nbsp;→
-						<input type="button" class="btn-info" onclick="showApply()" value="⑧升级部署申请">
+						<a class="notice">⑥点击打包</a>→&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn-success" title="注意：升级包必须在SVN的检出目录中，才可使用本功能！" id="upload" onclick="uploadFile()" value="⑦上传升级包"><%--&nbsp;&nbsp;&nbsp;→
+						<input type="button" class="btn-info" onclick="showApply()" value="⑧升级部署申请">--%>
 <!-- 						&nbsp;&nbsp;&nbsp;→<a class="notice" onclick="insertApply()" style="cursor:pointer;">测试</a> -->
 					</td>
 				</tr>
-				<%-- <tr class="upload" style="background-color:#f8fbf8;">
-					<td colspan="4">
-						<a class="notice"> </a>
-						<a class="notice"></a>→
-						<a class="notice"></a>→
-						<a class="notice"></a>→
-						<a class="notice"></a>→
-						<a class="notice"></a>→
-						<a class="notice"></a>→&nbsp;&nbsp;&nbsp;
-						<div class="input-group-btn" id="remote_url" style="float:left;padding-right:33px;display:none">
-							<button id="remote_url_btn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="svn上传路径">
-								<b>&#8595;</b>
-							</button>
-							<ul id="remote_pro" class="dropdown-menu pull-left">
-								<c:forEach items="${svn_remote_list }" var="pro">
-									<li><a href="javascript:selectSvn('${pro }','remote_url');">${pro }</a></li>
-								</c:forEach>
-							</ul>
-						</div>
-						<textarea id="remote_url" name="remote_url" type="text" class="form-control" rows="1" style="float:left;width:68%;display:none;font-weight:bold;" placeholder="输入 升级包上传的SVN路径">${svn_addr }</textarea>
-						<input type="button" class="btn-success" id="upload" onclick="" value="上传升级包">
-					</td>
-				</tr> --%>
 				<tr class="svnmodel font_diy" style="background-color:#f8fbf8;">
 					<td colspan="4">
 						<a class="notice">Tips： </a>
 						<a class="notice">①选择 Svn 路径</a>→
-						<a class="notice">②提交时间</a>→
-						<a class="notice">③查询</a>→
+						<a class="notice">②设置提交时间</a>→
+						<a class="notice">③查询SVN提交记录</a>→
 						<a class="notice">④勾选版本</a>→
-						<a class="notice">⑤确认核对</a>→
-						<a class="notice">⑥核对勾选</a>→
-						<a class="notice">⑦打包</a>→&nbsp;&nbsp;&nbsp;
-						<input type="button" class="btn-success" id="upload_remote" onclick="uploadFile()" value="⑧上传升级包">&nbsp;&nbsp;&nbsp;→
-						<input type="button" class="btn-info" onclick="showApply()" value="⑧升级部署申请">
+						<a class="notice">⑤点击确认（核对文件）</a>→
+						<a class="notice">⑥打包</a>→&nbsp;&nbsp;&nbsp;
+						<input type="button" class="btn-success" id="upload_remote" onclick="uploadFile()" title="注意：升级包必须在SVN的检出目录中，才可使用本功能！" value="⑧上传升级包"><%--&nbsp;&nbsp;&nbsp;→
+						<input type="button" class="btn-info" onclick="showApply()" value="⑧升级部署申请">--%>
 					</td>
 				</tr>
 				<tr id="diff_point"></tr>
 			</tbody>
-		</table>
-		
-		<table id="apply_tb" class="table table-bordered svnDirs" style="font-size: 13px;">
-			<tr style="background-color:#f8fbf8;display:">
-				<th style="text-align:right">发布包路径：</th>
-				<th colspan="7">
-					<div class="input-group-btn" id="svnDirs_div" style="float:left;padding-right:33px;">
-						<button id="svnDirs_addr_btn" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" title="svn升级包路径">
-							<b>选择</b>
-						</button>
-						<ul id="svnDirs_addr_pro" class="dropdown-menu pull-left" >
-							<c:forEach items="${svn_addr_list }" var="pro">
-								<li><a id="${pro }" href="javascript:selectSvn('${pro }','svnDirs_addr');">${pro }</a></li>
-							</c:forEach>
-						</ul>
-					</div>
-					<div class="input-group" style="float:left;width:80%;padding-left: 20px;">
-						<textarea id="svnDirs_addr" name="svnDirs_addr" class="form-control" rows="1" style="width:100%" 
-							onkeyup="getProDirs('svnDirs_addr')" ></textarea>
-						<div class="input-group-btn" >
-							<button type="button" class="btn btn-default"  title="上层目录"
-								onclick="deleteUri('svnDirs_addr')">&#8593;
-							</button>
-						</div>
-						<div class="input-group-btn">
-							<button id="add_svnDirs_addr" type="button" class="btn btn-default dropdown-toggle" title="下层目录"
-								data-toggle="dropdown" >&#8595;
-							</button>
-							<ul id="svnDirs_pro" class="dropdown-menu pull-right"></ul>
-						</div>
-					</div>
-					<div class="input-group">
-						<button id="confirm_svnurl" type="button" class="btn btn-info" title="确认发布包地址" style="margin-left: 46px;">确认地址</button>
-					</div>
-				</th>
-			</tr>
-			<tr style="background-color:#f8fbf8;display:">
-				<th style="text-align:right;color:red;">发布申请号：</th>
-				<td colspan="3">
-					<textarea id="fbsqh" name="fbsqh" class="form-control" rows="1" style="width:100%"></textarea>
-				</td>
-				<th style="text-align:right">发布文档地址：</th>
-				<td colspan="3">
-					<textarea id="fbwdlj" name="fbwdlj" class="form-control" rows="1" style="width:100%"></textarea>
-				</td>
-			</tr>
-			<tr style="background-color:#f8fbf8;display:">
-				<th style="text-align:right;">来源编号：</th>
-				<td colspan="3">
-					<textarea id="lybh" name="lybh" class="form-control" rows="1" style="width:100%"></textarea>
-				</td>
-				<th style="text-align:right">发布内容简述：</th>
-				<td colspan="3">
-					<textarea id="fbnrjs" name="fbnrjs" class="form-control" rows="1" style="width:100%"></textarea>
-				</td>
-			</tr>
-			<tr>
-				<th width="10%" style="text-align:right">升级环境：</th>
-				<td width="15%"><input id="fwqip" name="fwqip" class="form-control" placeholder=""></td>
-				<th width="10%" style="text-align:right">紧急程度：</th>
-				<td width="15%">
-					<select id="jjcd" name="jjcd" class="form-control" placeholder="">
-						<option value="">正常</option>
-						<option value="">紧急</option>
-					</select>
-				</td>
-				<th width="10%" style="text-align:right">紧急审批人员：</th>
-				<td width="15%"><input id="" class="form-control" placeholder="" value="无"></td>
-				<th width="10%" style="text-align:right">紧急审批方式：</th>
-				<td width="15%"><input id="" class="form-control" placeholder="" value="无"></td>
-			</tr>
-			<tr>
-				<th style="text-align:right">系统支持人员：</th>
-				<td><input id="" class="form-control" placeholder="" value="张超"></td>
-				<th style="text-align:right">验证人员：</th>
-				<td><input id="" class="form-control" placeholder="" value="李明"></td>
-				<th style="text-align:right">开始时间：</th>
-				<td>
-			        <div class="date form_datetime" data-link-field="xwkssj">
-	                    <input id="_xwkssj" class="form-control" size="20" type="text" value="" style="font-weight:bold">
-						<span class="add-on"><i class="icon-th"></i></span>
-	                </div>
-			        <input type="hidden" class="form-control" id="xwkssj" name="xwkssj">
-				</td>
-				<th style="text-align:right">完成时间：</th>
-				<td>
-			        <div class="date form_datetime" data-link-field="xwjssj">
-	                    <input id="_xwjssj" class="form-control" size="20" class="form-control" type="text" value="" style="font-weight:bold">
-						<span class="add-on"><i class="icon-th"></i></span>
-	                </div>
-			        <input type="hidden" class="form-control" id="xwjssj" name="xwjssj">
-				</td>
-			</tr>
-			<tr>
-				<th colspan="8">
-					<button id="submitBtn" type="button" class="btn btn-info" title="提交发布申请" style="margin-left: 46px;">去发布</button>
-					<a onclick="javascript:$('#apply_tb').hide();" style="color:#ec5a05;float:right;">Toggle</a>
-				</th>
-			</tr>
 		</table>
 		
 		<table class="table table-bordered svnmodel" id="svn_search" style="width:68%;margin:auto;font-size:14px;margin-bottom:20px">
@@ -502,12 +309,15 @@
 			var month = nowDate.getMonth();
 			var day = nowDate.getDate();
 			var date_str = year;
-			if (month < 9) {
-				month++;
+			if (++month < 10) {
 				month = "0" + month;
+			} else {
+				month = month + "";
 			}
 			if (day < 10) {
 				day = "0" + day;
+			} else {
+				day = day + "";
 			}
 			date_str +=  month + day;
 			$("#time_str").val(date_str);
@@ -637,7 +447,7 @@
    							if (count%2 == 0) {
    								clas = "diff_tr_odd";
    							}
-   							if (data.diffMap[key] != "none") {
+   							if (data.diffMap[key] != "none" && data.diffMap[key] != "unknown") {
 	   							var info = data.diffMap[key];
 	   							html +=
 	    							"<tr class='"+ clas +"'>" +
@@ -670,7 +480,7 @@
    					
    					$("#div-a").css("display", "block");
    					$("#EuiTree").css("display", "block");
-                		$.unblockUI();
+					$.unblockUI();
 				}
 			});
 		}
@@ -881,7 +691,7 @@
                 	if(data.flag == true){
 	                	bootbox.alert({ 
 					    	title: "<div style=\"font-size:16px;font-weight:800;\">提示：</div>",
-					    	message: "<div class=\"text-center\" style=\"font-size:15px;\"><b>文件已存在，【更改文件名序号】  或  点击红色连接【删除本地文件】后重试！</b></div>",
+					    	message: "<div class=\"text-center\" style=\"font-size:15px;\"><b>文件已存在，【更改文件名序号】  或  点击红色链接【删除本地文件】后重试！</b></div>",
 							callback: function () {
 								$("#gen_pro_btn").click();
 			                	$("#" + file_name).css("color", "red");

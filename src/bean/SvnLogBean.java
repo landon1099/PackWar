@@ -7,14 +7,14 @@ import java.util.Map;
 
 public class SvnLogBean {
 	private Long version;
-	private List<String> options = new ArrayList<>();
+	private List<String> options = new ArrayList<String>();
 	private String author;
-	private Map<String, String> authorMap = new HashMap<>();
+	private Map<String, String> authorMap = new HashMap<String, String>();
 	private String date; 
 	private String info; 
-	private List<ChangedUrls> changedUrls = new ArrayList<>();
-	private Map<String, String> cMap = new HashMap<>();
-	private Map<String, String> dMap = new HashMap<>();
+	private List<ChangedUrls> changedUrls = new ArrayList<ChangedUrls>();
+	private Map<String, String> cMap = new HashMap<String, String>();
+	private Map<String, String> dMap = new HashMap<String, String>();
 	
 	public Map<String, String> getcMap() {
 		return cMap;

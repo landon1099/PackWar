@@ -1,10 +1,9 @@
 
-import java.awt.EventQueue;
-
-import javax.swing.UIManager;
-
-import swing.page.MainPage;
 import freeseawind.lf.LittleLuckLookAndFeel;
+import swing.page.MainPage;
+
+import javax.swing.*;
+import java.awt.*;
 
 
 public class PackMain {
@@ -14,10 +13,9 @@ public class PackMain {
 		
 		EventQueue.invokeLater(new Runnable(){
             public void run(){
-            	MainPage mainPage = new MainPage();
                 try{
                 	UIManager.setLookAndFeel(LittleLuckLookAndFeel.class.getName());
-                	mainPage.CreateJFrame();
+                    new MainPage().CreateJFrame();
                 }
                 catch (Exception e){
                     e.printStackTrace();

@@ -1,66 +1,23 @@
 package servlet;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import bean.*;
+import com.alibaba.fastjson.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
-import org.tmatesoft.svn.core.wc.SVNClientManager;
-import org.tmatesoft.svn.core.wc.SVNDiffClient;
-import org.tmatesoft.svn.core.wc.SVNRevision;
-import org.tmatesoft.svn.core.wc.SVNStatus;
-import org.tmatesoft.svn.core.wc.SVNStatusClient;
-import org.tmatesoft.svn.core.wc.SVNStatusType;
-import org.tmatesoft.svn.core.wc.SVNWCUtil;
-
-import service.ApplyService;
-import service.ApplyServiceImpl;
+import org.tmatesoft.svn.core.wc.*;
 import service.SvnService;
 import service.SvnServiceImpl;
 import utils.PropertiesUtil;
-import bean.ApplyBean;
-import bean.Attributes;
-import bean.EUITreeBean;
-import bean.PackBean;
-import bean.SvnBean;
-import bean.SvnLogBean;
-import bean.SvnLoginBean;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class PackWarServlet extends BaseServlet {
 
@@ -205,7 +162,6 @@ public class PackWarServlet extends BaseServlet {
 	 */
 	public void getProFiles(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException, SVNException {
-		double startTime = System.currentTimeMillis();
 		String projectUrl = request.getParameter("proUrl");
 		String isCheckSvn = request.getParameter("isCheckSvn");
 		
@@ -258,12 +214,6 @@ public class PackWarServlet extends BaseServlet {
 		}
 		String jsonData = getJSONString(projectUrl, changedList, version);
 		Map<String, String> diffMap = getVsionFiles(doDiffMap);
-		
-		//计算运行用时
-		double endTime = System.currentTimeMillis();
-		double tmpTime = (endTime - startTime)/1000;
-		tmpTime = (double)(Math.round(tmpTime*100))/100;
-		System.out.println("------获取目录用时：【" + tmpTime + "s】------");
 		
 		JSONObject json = new JSONObject();
 	    json.put("jsonData", jsonData);
@@ -378,7 +328,7 @@ public class PackWarServlet extends BaseServlet {
 		String textStr = path.split("/")[path.split("/").length-1];
 		String versionStr = "";
 		if (version!=0.0) {
-			versionStr = "<span class='span'>____JDK: "+version+"</span>";
+			versionStr = "<span class='span'>____JDK版本: "+version+"</span>";
 		}
 		if (!"".equals(textStr)) {
 			bean.setText(textStr+versionStr);
@@ -501,8 +451,8 @@ public class PackWarServlet extends BaseServlet {
 				this.forward(request, response, "pages/packwar");
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
 			System.out.println("==errorin getProDirs---:[读取/写入、判断/新建目录地址]---------");
+			e.printStackTrace();
 		}
 	}
 
@@ -1126,8 +1076,7 @@ public class PackWarServlet extends BaseServlet {
 		} catch (SVNException e) {
 			if (!url.contains("META-INF")) {
 				resultBoolean = true;
-				System.out.println("---判断url是否版本文件抛出异常：" + url);
-//				e.printStackTrace();
+				//System.out.println("---判断url是否版本文件抛出异常：" + url);
 			}
 		}
         return resultBoolean;
@@ -1276,7 +1225,7 @@ public class PackWarServlet extends BaseServlet {
 					if (new File(projectUrl + tmpStr).exists()) {
 						isExsit = true;
 						startIndex = tmplength;
-						System.out.println("------规则路径：" + projectUrl + tmpStr);
+						System.out.println("------判断规则路径为：" + projectUrl + tmpStr);
 						System.out.println("------路径规则：svn路径去除多余字段[" + uri.substring(0, startIndex) + "]");
 						break;
 					}
@@ -1313,12 +1262,6 @@ public class PackWarServlet extends BaseServlet {
 		    json.put("cMap", tmpMap);
 		    response.setContentType("text/html;charset=UTF-8");
 		    response.getWriter().write(json.toString());
-		    
-		    //计算运行用时
-		    double endTime = System.currentTimeMillis();
-		    double tmpTime = (endTime - startTime)/1000;
-		    tmpTime = (double)(Math.round(tmpTime*100))/100;
-		    System.out.println("------获取目录用时：【" + tmpTime + "s】------");
 		    
 		} else {
 			//查询svn信息
@@ -1455,23 +1398,6 @@ public class PackWarServlet extends BaseServlet {
 		return svnDirs;
 	}
 	
-	public static void insertApply(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		String svnUpperUrl = request.getParameter("svnUpperUrl");
-		String svnUrl = request.getParameter("svnUrl");
-		String apply_no = request.getParameter("apply_no");
-		ApplyService service = new ApplyServiceImpl();
-		ApplyBean applyBean = new ApplyBean();
-		applyBean.setApply_no(apply_no);
-		applyBean.setSvnUpperUrl(svnUpperUrl);
-		applyBean.setSvnUrl(svnUrl);
-		int result = service.insertApply(applyBean);
-		JSONObject json = new JSONObject();
-		json.put("result", result);
-		response.setCharacterEncoding("UTF-8");
-	    response.setContentType("application/json");
-		response.getWriter().write(json.toString());
-	}
-	
 	@SuppressWarnings("deprecation")
 	public static void getDiff(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		int status = 1;
@@ -1533,7 +1459,8 @@ public class PackWarServlet extends BaseServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		response.getWriter().write(json.toString());
 	}
-	
+
+	//获取修改、新增文件
 	public static Map<String, String> getVsionFiles(Map<String, String> doDiffMap) {
 		Map<String, String> vMap = new HashMap<>();
 		for (Entry<String, String> entry : doDiffMap.entrySet()) {
@@ -1551,8 +1478,10 @@ public class PackWarServlet extends BaseServlet {
 					vMap.put(entry.getKey(), "none");
 				}
 			} catch (SVNException e) {
-				e.printStackTrace();
-				System.out.println("==errorin PackWarServlet.getVsionFiles() 无法判断是否版本文件："+entry.getKey());
+				if (!entry.getKey().contains("META-INF")) {
+					vMap.put(entry.getKey(), "unknown");
+				}
+				//e.printStackTrace();
 			}
 		}
 		return vMap;

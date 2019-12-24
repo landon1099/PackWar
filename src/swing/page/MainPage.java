@@ -1,38 +1,18 @@
 package swing.page;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
+import org.apache.commons.lang.StringUtils;
+import org.tmatesoft.svn.core.SVNException;
+import swing.pack.PackWar;
+import utils.PropertiesUtil;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
-
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.WindowConstants;
-
-import org.apache.commons.lang.StringUtils;
-import org.tmatesoft.svn.core.SVNException;
-
-import swing.pack.PackWar;
-import utils.PropertiesUtil;
 
 public class MainPage {
 	
