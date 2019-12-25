@@ -26,7 +26,7 @@ public class TreePage {
 	
 	public void createTree(final String path, final String gPath, List<String> list) {
 		JFrame frame = new JFrame("确认打包");
-		frame.setBounds(100, 50, 600, 610);
+		frame.setBounds(100, 50, 910, 610);
 		frame.setLocationRelativeTo(null);
         JPanel panel = new JPanel(null);
 		final JTree tree = new JTree();
@@ -128,7 +128,7 @@ public class TreePage {
 	//升级包树
 	public  void createGenTree(final String path) {
 		JFrame frame = new JFrame("升级包预览");
-		frame.setBounds(900, 50, 400, 610);
+		frame.setBounds(900, 50, 910, 610);
 		frame.setLocationRelativeTo(null);
         JPanel panel = new JPanel(null);
 		final JTree tree = new JTree();
